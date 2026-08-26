@@ -1,0 +1,47 @@
+/*
+ * Spotter — Global Styles
+ *
+ * Import order matters: reset → palette → semantic tokens.
+ * This file adds base typographic and body defaults using
+ * semantic tokens.
+ */
+
+@import "./reset.css";
+@import "./palette.css";
+@import "./semantic-tokens.css";
+
+/* ── Base ───────────────────────────────────────────────── */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-primary);
+}
+
+/* ── Headings ───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-heading);
+  line-height: 1.2;
+}
+
+/* ── Links ──────────────────────────────────────────────── */
+a {
+  color: var(--color-interactive-primary);
+}
+
+a:hover {
+  color: var(--color-interactive-primary-hover);
+}
+
+/* ── Visually Hidden utility ────────────────────────────── */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

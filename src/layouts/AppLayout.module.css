@@ -1,0 +1,76 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  min-height: 64px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--color-text-heading);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.main {
+  flex: 1;
+  padding: var(--space-lg);
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.main.mainImmersive {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .main.mainImmersive { padding: 0; }
+}
+
+@media (min-width: 1024px) {
+  .main.mainImmersive { padding: 0; }
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .header {
+    padding: var(--space-md) var(--space-xl);
+  }
+
+  .main {
+    padding: var(--space-xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding: var(--space-2xl);
+  }
+}
+
+@media (min-width: 1280px) {
+  .main {
+    max-width: 1440px;
+  }
+}

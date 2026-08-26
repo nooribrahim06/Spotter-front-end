@@ -1,0 +1,471 @@
+{
+  "01_idle_hello": {
+    "source_cell": {
+      "row": 0,
+      "column": 0
+    },
+    "master_size": [
+      384,
+      512
+    ],
+    "long_edge_exports": [
+      {
+        "long_edge": 128,
+        "size": [
+          96,
+          128
+        ]
+      },
+      {
+        "long_edge": 256,
+        "size": [
+          192,
+          256
+        ]
+      },
+      {
+        "long_edge": 384,
+        "size": [
+          288,
+          384
+        ]
+      },
+      {
+        "long_edge": 512,
+        "size": [
+          384,
+          512
+        ]
+      },
+      {
+        "long_edge": 768,
+        "size": [
+          576,
+          768
+        ]
+      },
+      {
+        "long_edge": 1024,
+        "size": [
+          768,
+          1024
+        ]
+      },
+      {
+        "long_edge": 1536,
+        "size": [
+          1152,
+          1536
+        ]
+      }
+    ],
+    "square_exports": [
+      256,
+      512,
+      768,
+      1024
+    ]
+  },
+  "02_pointing": {
+    "source_cell": {
+      "row": 0,
+      "column": 2
+    },
+    "master_size": [
+      384,
+      512
+    ],
+    "long_edge_exports": [
+      {
+        "long_edge": 128,
+        "size": [
+          96,
+          128
+        ]
+      },
+      {
+        "long_edge": 256,
+        "size": [
+          192,
+          256
+        ]
+      },
+      {
+        "long_edge": 384,
+        "size": [
+          288,
+          384
+        ]
+      },
+      {
+        "long_edge": 512,
+        "size": [
+          384,
+          512
+        ]
+      },
+      {
+        "long_edge": 768,
+        "size": [
+          576,
+          768
+        ]
+      },
+      {
+        "long_edge": 1024,
+        "size": [
+          768,
+          1024
+        ]
+      },
+      {
+        "long_edge": 1536,
+        "size": [
+          1152,
+          1536
+        ]
+      }
+    ],
+    "square_exports": [
+      256,
+      512,
+      768,
+      1024
+    ]
+  },
+  "03_thinking": {
+    "source_cell": {
+      "row": 0,
+      "column": 3
+    },
+    "master_size": [
+      374,
+      512
+    ],
+    "long_edge_exports": [
+      {
+        "long_edge": 128,
+        "size": [
+          94,
+          128
+        ]
+      },
+      {
+        "long_edge": 256,
+        "size": [
+          187,
+          256
+        ]
+      },
+      {
+        "long_edge": 384,
+        "size": [
+          280,
+          384
+        ]
+      },
+      {
+        "long_edge": 512,
+        "size": [
+          374,
+          512
+        ]
+      },
+      {
+        "long_edge": 768,
+        "size": [
+          561,
+          768
+        ]
+      },
+      {
+        "long_edge": 1024,
+        "size": [
+          748,
+          1024
+        ]
+      },
+      {
+        "long_edge": 1536,
+        "size": [
+          1122,
+          1536
+        ]
+      }
+    ],
+    "square_exports": [
+      256,
+      512,
+      768,
+      1024
+    ]
+  },
+  "04_progress_dashboard": {
+    "source_cell": {
+      "row": 1,
+      "column": 0
+    },
+    "master_size": [
+      379,
+      512
+    ],
+    "long_edge_exports": [
+      {
+        "long_edge": 128,
+        "size": [
+          95,
+          128
+        ]
+      },
+      {
+        "long_edge": 256,
+        "size": [
+          190,
+          256
+        ]
+      },
+      {
+        "long_edge": 384,
+        "size": [
+          284,
+          384
+        ]
+      },
+      {
+        "long_edge": 512,
+        "size": [
+          379,
+          512
+        ]
+      },
+      {
+        "long_edge": 768,
+        "size": [
+          568,
+          768
+        ]
+      },
+      {
+        "long_edge": 1024,
+        "size": [
+          758,
+          1024
+        ]
+      },
+      {
+        "long_edge": 1536,
+        "size": [
+          1137,
+          1536
+        ]
+      }
+    ],
+    "square_exports": [
+      256,
+      512,
+      768,
+      1024
+    ]
+  },
+  "05_ai_coach": {
+    "source_cell": {
+      "row": 1,
+      "column": 1
+    },
+    "master_size": [
+      384,
+      512
+    ],
+    "long_edge_exports": [
+      {
+        "long_edge": 128,
+        "size": [
+          96,
+          128
+        ]
+      },
+      {
+        "long_edge": 256,
+        "size": [
+          192,
+          256
+        ]
+      },
+      {
+        "long_edge": 384,
+        "size": [
+          288,
+          384
+        ]
+      },
+      {
+        "long_edge": 512,
+        "size": [
+          384,
+          512
+        ]
+      },
+      {
+        "long_edge": 768,
+        "size": [
+          576,
+          768
+        ]
+      },
+      {
+        "long_edge": 1024,
+        "size": [
+          768,
+          1024
+        ]
+      },
+      {
+        "long_edge": 1536,
+        "size": [
+          1152,
+          1536
+        ]
+      }
+    ],
+    "square_exports": [
+      256,
+      512,
+      768,
+      1024
+    ]
+  },
+  "06_celebrating": {
+    "source_cell": {
+      "row": 1,
+      "column": 2
+    },
+    "master_size": [
+      384,
+      501
+    ],
+    "long_edge_exports": [
+      {
+        "long_edge": 128,
+        "size": [
+          98,
+          128
+        ]
+      },
+      {
+        "long_edge": 256,
+        "size": [
+          196,
+          256
+        ]
+      },
+      {
+        "long_edge": 384,
+        "size": [
+          294,
+          384
+        ]
+      },
+      {
+        "long_edge": 512,
+        "size": [
+          392,
+          512
+        ]
+      },
+      {
+        "long_edge": 768,
+        "size": [
+          589,
+          768
+        ]
+      },
+      {
+        "long_edge": 1024,
+        "size": [
+          785,
+          1024
+        ]
+      },
+      {
+        "long_edge": 1536,
+        "size": [
+          1177,
+          1536
+        ]
+      }
+    ],
+    "square_exports": [
+      256,
+      512,
+      768,
+      1024
+    ]
+  },
+  "07_victory": {
+    "source_cell": {
+      "row": 1,
+      "column": 3
+    },
+    "master_size": [
+      375,
+      512
+    ],
+    "long_edge_exports": [
+      {
+        "long_edge": 128,
+        "size": [
+          94,
+          128
+        ]
+      },
+      {
+        "long_edge": 256,
+        "size": [
+          188,
+          256
+        ]
+      },
+      {
+        "long_edge": 384,
+        "size": [
+          281,
+          384
+        ]
+      },
+      {
+        "long_edge": 512,
+        "size": [
+          375,
+          512
+        ]
+      },
+      {
+        "long_edge": 768,
+        "size": [
+          562,
+          768
+        ]
+      },
+      {
+        "long_edge": 1024,
+        "size": [
+          750,
+          1024
+        ]
+      },
+      {
+        "long_edge": 1536,
+        "size": [
+          1125,
+          1536
+        ]
+      }
+    ],
+    "square_exports": [
+      256,
+      512,
+      768,
+      1024
+    ]
+  }
+}

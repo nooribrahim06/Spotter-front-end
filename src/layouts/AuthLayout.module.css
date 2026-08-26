@@ -1,0 +1,31 @@
+.layout {
+  position: relative;
+  min-height: 100svh;
+  overflow-x: hidden;
+  background: #f7f6f2;
+}
+
+.brand {
+  position: absolute;
+  z-index: 30;
+  top: 2rem;
+  left: clamp(2rem, 4.5vw, 5rem);
+  color: #193b3d;
+  font-size: 1.03rem;
+  font-weight: 950;
+  letter-spacing: .13em;
+  text-decoration: none;
+  transition: letter-spacing .25s ease;
+}
+
+.brand span { color: #f0785e; }
+.brand:hover { color: #193b3d; letter-spacing: .16em; }
+
+.main {
+  width: 100%;
+  min-height: 100svh;
+}
+
+@media (max-width: 900px) {
+  .brand { top: 1.55rem; left: 1.25rem; }
+}

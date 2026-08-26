@@ -1,0 +1,184 @@
+.header { margin-bottom: 1.7rem; }
+
+.kicker {
+  margin: 0 0 .75rem;
+  color: #4f8485;
+  font-size: .65rem;
+  font-weight: 900;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: #193b3d;
+  font-size: clamp(2.45rem, 4.25vw, 4.15rem);
+  font-weight: 930;
+  line-height: .96;
+  letter-spacing: -.06em;
+}
+
+.intro {
+  max-width: 450px;
+  margin: 1rem 0 0;
+  color: rgba(25, 59, 61, .62);
+  font-size: .91rem;
+  line-height: 1.55;
+}
+
+.form { display: grid; gap: 1rem; }
+
+.form label {
+  color: #193b3d;
+  font-size: .72rem;
+  font-weight: 850;
+  letter-spacing: .04em;
+}
+
+.input {
+  min-height: 50px;
+  padding-inline: .95rem;
+  border-color: rgba(25, 59, 61, .14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .78);
+  box-shadow: 0 7px 22px rgba(25, 59, 61, .035);
+}
+
+.input:focus {
+  border-color: #4f8485;
+  box-shadow: 0 0 0 4px rgba(79, 132, 133, .11), 0 10px 24px rgba(25, 59, 61, .06);
+}
+
+.rootError {
+  padding: .8rem .9rem;
+  border: 1px solid rgba(214, 69, 69, .16);
+  border-radius: 12px;
+  color: #a43131;
+  background: rgba(214, 69, 69, .065);
+}
+
+.submitButton {
+  min-height: 52px;
+  margin-top: .2rem;
+  border-radius: 999px;
+  background: #193b3d;
+  border-color: #193b3d;
+  box-shadow: 0 16px 34px rgba(25, 59, 61, .17);
+  font-weight: 850;
+  transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #f0785e;
+  border-color: #f0785e;
+  transform: translateY(-4px);
+  box-shadow: 0 22px 42px rgba(240, 120, 94, .25);
+}
+
+.switchCopy {
+  margin-top: 1.35rem;
+  color: rgba(25, 59, 61, .55);
+  font-size: .78rem;
+  text-align: center;
+}
+
+.switchCopy a,
+.inlineLink {
+  color: #193b3d;
+  font-weight: 850;
+  text-underline-offset: 3px;
+}
+
+.notice,
+.errorNotice,
+.successNotice {
+  margin: 1.1rem 0;
+  padding: .9rem 1rem;
+  display: flex;
+  gap: .75rem;
+  border-radius: 15px;
+  font-size: .76rem;
+  line-height: 1.5;
+}
+
+.notice { color: #294f51; background: rgba(230, 240, 243, .72); }
+.errorNotice { color: #963b32; background: rgba(240, 120, 94, .1); border: 1px solid rgba(240, 120, 94, .18); }
+.successNotice { color: #31573a; background: rgba(175, 198, 154, .23); border: 1px solid rgba(175, 198, 154, .38); }
+
+.noticeIcon {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: #fff;
+  background: #4f8485;
+  font-size: .72rem;
+  font-weight: 900;
+}
+
+.emailChip {
+  width: fit-content;
+  max-width: 100%;
+  margin: 1.1rem 0;
+  padding: .68rem .85rem;
+  overflow: hidden;
+  border: 1px solid rgba(25, 59, 61, .1);
+  border-radius: 999px;
+  color: #193b3d;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(25, 59, 61, .06);
+  font-size: .76rem;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actionRow { display: flex; align-items: center; gap: .9rem; margin-top: 1.2rem; flex-wrap: wrap; }
+
+.primaryLink,
+.secondaryLink {
+  min-height: 50px;
+  padding: .75rem 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 850;
+  text-decoration: none;
+  transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+}
+
+.primaryLink { color: #fff; background: #193b3d; box-shadow: 0 15px 32px rgba(25, 59, 61, .16); }
+.primaryLink:hover { color: #fff; background: #f0785e; transform: translateY(-4px); box-shadow: 0 20px 42px rgba(240, 120, 94, .22); }
+.secondaryLink { color: #193b3d; border: 1px solid rgba(25, 59, 61, .15); background: rgba(255, 255, 255, .7); }
+.secondaryLink:hover { color: #193b3d; transform: translateY(-3px); box-shadow: 0 12px 28px rgba(25, 59, 61, .08); }
+
+.textButton {
+  padding: .25rem 0;
+  color: #193b3d;
+  font-size: .76rem;
+  font-weight: 850;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.textButton:hover { color: #f0785e; transform: translateX(3px); }
+
+.loadingState {
+  padding: 2rem 0;
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  color: rgba(25, 59, 61, .6);
+}
+
+@media (max-width: 520px) {
+  .title { font-size: 2.45rem; }
+  .header { margin-bottom: 1.35rem; }
+  .form { gap: .85rem; }
+}

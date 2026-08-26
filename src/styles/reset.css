@@ -1,0 +1,146 @@
+/*
+ * Spotter — CSS Reset
+ *
+ * Minimal, opinionated reset for consistent cross-browser baseline.
+ * Based on modern reset best practices (Josh Comeau + Andy Bell).
+ */
+
+/* ── Box Sizing ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ── Margin / Padding Reset ─────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Document ───────────────────────────────────────────── */
+html {
+  /* Prevent font-size inflation on mobile */
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+/* ── Body ───────────────────────────────────────────────── */
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  /* Let the semantic-tokens layer set the actual sizes */
+}
+
+p, li, figcaption {
+  overflow-wrap: break-word;
+}
+
+/* ── Media ──────────────────────────────────────────────── */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+/* ── Form elements inherit fonts ────────────────────────── */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* ── Textarea without grabber ───────────────────────────── */
+textarea:not([rows]) {
+  min-height: 10em;
+}
+
+/* ── Anchor reset ───────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration-skip-ink: auto;
+}
+
+/* ── List reset (only in roles that are not lists) ──────── */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* ── Remove button defaults ─────────────────────────────── */
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* ── Focus visible ──────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring, currentColor);
+  outline-offset: 2px;
+}
+
+/* ── Smooth scrolling only for users who don't mind motion */
+@media (prefers-reduced-motion: no-preference) {
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ── Reduce motion globally ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Skip navigation ────────────────────────────────────── */
+.skip-nav {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-nav:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  padding: 1em 2em;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  z-index: 9999;
+  background: var(--palette-navy, #2F4156);
+  color: var(--palette-white, #FFFFFF);
+  font-weight: 700;
+}

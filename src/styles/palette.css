@@ -1,0 +1,22 @@
+/*
+ * Spotter — Raw Palette Tokens
+ *
+ * Approved brand colors from the Spotter specification.
+ * These are raw palette tokens, NOT semantic assignments.
+ * Semantic roles (primary, background, error, etc.) are defined
+ * in semantic-tokens.css and will be finalized with the style brief.
+ *
+ * No additional brand color may be introduced merely to imitate
+ * the palette mockup. Accessibility-derived colors are documented
+ * when added.
+ */
+
+:root {
+  --palette-navy:  #2F4156;
+  --palette-teal:  #567C8D;
+  --palette-sky:   #C8D9E6;
+  --palette-beige: #F5EFEB;
+  --palette-white: #FFFFFF;
+  --palette-ink:   #18232D;
+  --palette-coral: #FF7A6B;
+}
