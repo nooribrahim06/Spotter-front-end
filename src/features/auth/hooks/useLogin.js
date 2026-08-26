@@ -43,7 +43,7 @@ export function useLogin(setError) {
           // Wrong email, wrong password, and unverified all use this code.
           setError("root", {
             type: "server",
-            message: "Invalid email or password.",
+            message: "Email or password is not valid.",
           });
           break;
 

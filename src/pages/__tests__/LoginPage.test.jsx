@@ -65,7 +65,7 @@ describe("LoginPage", () => {
     await user.type(screen.getByLabelText(/^password$/i), "Password123!");
     await user.click(screen.getByRole("button", { name: /log in/i }));
     
-    expect(await screen.findByText("Invalid email or password.")).toBeInTheDocument();
+    expect(await screen.findByText("Email or password is not valid.")).toBeInTheDocument();
     expect(screen.queryByText("Some backend specific message")).not.toBeInTheDocument();
   });
 });
