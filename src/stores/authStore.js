@@ -31,6 +31,14 @@ export const useAuthStore = create((set) => ({
   setAccessToken: (accessToken) => set({ accessToken }),
 
   /**
+   * Merge a server-confirmed user update without replacing the access token.
+   */
+  updateUser: (userUpdate) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, ...userUpdate } : state.user,
+    })),
+
+  /**
    * Explicitly set the auth status.
    */
   setAuthStatus: (authStatus) => set({ authStatus }),

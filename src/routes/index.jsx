@@ -8,6 +8,8 @@ import AppLayout from "../layouts/AppLayout.jsx";
 // Guards
 import GuestGuard from "../components/guards/GuestGuard.jsx";
 import AuthGuard from "../components/guards/AuthGuard.jsx";
+import OnboardingGate from "../components/guards/OnboardingGate.jsx";
+import OnboardingRouteGuard from "../components/guards/OnboardingRouteGuard.jsx";
 
 // Pages
 import LandingPage from "../pages/LandingPage.jsx";
@@ -17,6 +19,9 @@ import VerifyEmailSentPage from "../pages/VerifyEmailSentPage.jsx";
 import VerifyEmailPage from "../pages/VerifyEmailPage.jsx";
 import NotFoundPage from "../pages/NotFoundPage.jsx";
 import HomePage from "../pages/app/HomePage.jsx";
+import OnboardingWelcomePage from "../pages/onboarding/OnboardingWelcomePage.jsx";
+import OnboardingPage from "../pages/onboarding/OnboardingPage.jsx";
+import OnboardingSuccessPage from "../pages/onboarding/OnboardingSuccessPage.jsx";
 
 /**
  * Global Route Configuration
@@ -64,6 +69,28 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    element: <AuthGuard />,
+    children: [
+      {
+        path: "/onboarding/success",
+        element: <OnboardingSuccessPage />,
+      },
+      {
+        element: <OnboardingRouteGuard />,
+        children: [
+          {
+            path: "/onboarding",
+            element: <OnboardingWelcomePage />,
+          },
+          {
+            path: "/onboarding/:step",
+            element: <OnboardingPage />,
+          },
+        ],
+      },
+    ],
+  },
+  {
     path: "/app",
     element: <AppLayout />,
     children: [
@@ -71,18 +98,23 @@ export const router = createBrowserRouter([
         element: <AuthGuard />,
         children: [
           {
-            index: true,
-            element: <Navigate to="/app/home" replace />,
-          },
-          {
-            path: "home",
-            element: <HomePage />,
-            handle: { immersive: true },
-          },
-          {
-            path: "*",
-            element: <NotFoundPage />,
-            handle: { immersive: true },
+            element: <OnboardingGate />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/app/home" replace />,
+              },
+              {
+                path: "home",
+                element: <HomePage />,
+                handle: { immersive: true },
+              },
+              {
+                path: "*",
+                element: <NotFoundPage />,
+                handle: { immersive: true },
+              },
+            ],
           },
         ],
       },

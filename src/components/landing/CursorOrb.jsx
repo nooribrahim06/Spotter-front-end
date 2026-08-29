@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./CursorOrb.module.css";
 
-export default function CursorOrb() {
+export default function CursorOrb({ className = "" }) {
   const orbRef = useRef(null);
 
   useEffect(() => {
@@ -44,5 +44,5 @@ export default function CursorOrb() {
     };
   }, []);
 
-  return <div ref={orbRef} className={styles.orb} data-visible="false" aria-hidden="true" />;
+  return <div ref={orbRef} className={`${styles.orb} ${className}`} data-visible="false" aria-hidden="true" />;
 }
