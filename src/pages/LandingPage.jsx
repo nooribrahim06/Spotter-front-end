@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -186,6 +187,7 @@ export default function LandingPage({ authenticated = false, user, onLogout, isL
             {authenticated ? (
               <>
                 <span className={styles.navUser}>Hi, {user?.username || "Spotter"}</span>
+                <Link className={styles.signInLink} to="/app/profile">Profile</Link>
                 <button className={styles.navCta} type="button" onClick={onLogout} disabled={isLoggingOut}>
                   {isLoggingOut ? "Signing out…" : "Log out"} <span aria-hidden="true">↗</span>
                 </button>

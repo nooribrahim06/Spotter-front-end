@@ -69,17 +69,20 @@ describe("apiClient", () => {
     expect(refreshSpy).not.toHaveBeenCalled();
   });
 
-  it("clears auth on terminal refresh error", async () => {
-    server.use(
-      http.get("*/api/test", () => {
-        return HttpResponse.json({ code: "INVALID_ACCESS_TOKEN" }, { status: 401 });
-      }),
-      http.post("*/api/auth/refresh", () => {
-        return HttpResponse.json({ code: "INVALID_CREDENTIALS" }, { status: 401 });
-      })
-    );
+  it.each(["INVALID_CREDENTIALS", "INVALID_REFRESH_TOKEN", "INVALID_SESSION", "REFRESH_TOKEN_THEFT_DETECTED"])(
+    "clears auth on terminal refresh error %s",
+    async (code) => {
+      server.use(
+        http.get("*/api/test", () => {
+          return HttpResponse.json({ code: "INVALID_ACCESS_TOKEN" }, { status: 401 });
+        }),
+        http.post("*/api/auth/refresh", () => {
+          return HttpResponse.json({ code }, { status: 401 });
+        })
+      );
 
-    await expect(apiClient.get("/api/test")).rejects.toThrow();
-    expect(useAuthStore.getState().authStatus).toBe("unauthenticated");
-  });
+      await expect(apiClient.get("/api/test")).rejects.toThrow();
+      expect(useAuthStore.getState().authStatus).toBe("unauthenticated");
+    }
+  );
 });

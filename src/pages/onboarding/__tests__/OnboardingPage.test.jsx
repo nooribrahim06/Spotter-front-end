@@ -40,7 +40,7 @@ describe.sequential("OnboardingPage", () => {
 
   it("moves a new user back to step 1", async () => {
     renderWithProviders(<TestRoutes />, { initialEntries: ["/onboarding/3"] });
-    expect(await screen.findByRole("heading", { name: /real starting point/i })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /real starting point/i }, { timeout: 3000 })).toBeInTheDocument();
   });
 
   it("resumes returning users from the saved current step", async () => {
@@ -63,6 +63,8 @@ describe.sequential("OnboardingPage", () => {
     });
     renderWithProviders(<TestRoutes />, { initialEntries: ["/onboarding/1"] });
     expect(await screen.findByText("App home")).toBeInTheDocument();
+    expect(useAuthStore.getState().user.onboardingStatus).toBe("completed");
+    expect(useAuthStore.getState().user.onboardingStep).toBeNull();
   });
 
   it("blocks step 1 when measurements are outside the contract", async () => {
@@ -71,7 +73,7 @@ describe.sequential("OnboardingPage", () => {
     await screen.findByRole("heading", { name: /real starting point/i });
 
     await user.type(screen.getByLabelText("First name"), "Noor");
-    await user.type(screen.getByLabelText("Second name"), "Ibrahim");
+    await user.type(screen.getByLabelText("Last name"), "Ibrahim");
     fireEvent.change(screen.getByLabelText("Date of birth"), { target: { value: "2002-08-27" } });
     await user.click(screen.getByText("Male"));
     await user.type(screen.getByLabelText("Height"), "99");
@@ -80,6 +82,7 @@ describe.sequential("OnboardingPage", () => {
     await user.click(screen.getByRole("button", { name: /save and continue/i }));
 
     expect(await screen.findByText(/height must be at least 100 cm/i)).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveFocus();
   });
 
   it("shows target weight only for goals that use it", async () => {

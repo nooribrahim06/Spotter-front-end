@@ -6,7 +6,7 @@ const currentYear = new Date().getFullYear();
 
 export const stepOneSchema = z.object({
   firstName: z.string().trim().min(2, "Enter your first name").max(40, "First name is too long"),
-  lastName: z.string().trim().min(2, "Enter your second name").max(40, "Second name is too long"),
+  lastName: z.string().trim().min(2, "Enter your last name").max(40, "Last name is too long"),
   birthYear: z
     .number()
     .int("Enter a whole birth year")

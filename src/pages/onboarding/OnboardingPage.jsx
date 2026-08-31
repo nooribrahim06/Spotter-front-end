@@ -38,21 +38,21 @@ const STEP_META = {
 
 const DEFAULT_VALUES = savedDataToFormValues();
 
-function Field({ label, error, hint, children, className = "" }) {
+function Field({ label, error, hint, messageId, children, className = "" }) {
   return (
     <label className={`${styles.field} ${className}`}>
       <span className={styles.fieldLabel}>{label}</span>
       {children}
-      {hint && !error && <small>{hint}</small>}
-      {error && <small className={styles.fieldError} role="alert">{error}</small>}
+      {hint && !error && <small id={messageId}>{hint}</small>}
+      {error && <small id={messageId} className={styles.fieldError}>{error}</small>}
     </label>
   );
 }
 
-function SelectionCard({ name, value, register, selected, title, note, symbol }) {
+function SelectionCard({ name, value, register, selected, title, note, symbol, describedBy }) {
   return (
     <label className={styles.selectionCard} data-selected={selected || undefined}>
-      <input type="radio" value={value} {...register(name)} />
+      <input type="radio" value={value} aria-invalid={Boolean(describedBy)} aria-describedby={describedBy} {...register(name)} />
       <span className={styles.selectionSymbol} aria-hidden="true">{symbol}</span>
       <span><strong>{title}</strong><small>{note}</small></span>
       <i aria-hidden="true">✓</i>
@@ -68,8 +68,11 @@ export default function OnboardingPage() {
   const pageRef = useRef(null);
   const panelRef = useRef(null);
   const formPaneRef = useRef(null);
+  const stepHeadingRef = useRef(null);
+  const errorSummaryRef = useRef(null);
   const completionLock = useRef(false);
   const [direction, setDirection] = useState(1);
+  const [errorFocusRequest, setErrorFocusRequest] = useState(0);
   const updateUser = useAuthStore((state) => state.updateUser);
 
   const {
@@ -102,6 +105,10 @@ export default function OnboardingPage() {
   }, [requestedStep]);
   useEffect(() => {
     if (formPaneRef.current) formPaneRef.current.scrollTop = 0;
+    const focusFrame = window.requestAnimationFrame(() => {
+      stepHeadingRef.current?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(focusFrame);
   }, [requestedStep]);
 
 
@@ -109,6 +116,10 @@ export default function OnboardingPage() {
     if (!onboarding.data) return;
     if (onboarding.data.status === "completed") {
       if (completionLock.current) return;
+      updateUser({
+        onboardingStatus: onboarding.data.status,
+        onboardingStep: onboarding.data.currentStep,
+      });
       navigate("/app/home", { replace: true });
       return;
     }
@@ -120,7 +131,7 @@ export default function OnboardingPage() {
     if (requestedStep > allowedStep) {
       navigate(`/onboarding/${allowedStep}`, { replace: true });
     }
-  }, [onboarding.data, navigate, requestedStep, reset]);
+  }, [onboarding.data, navigate, requestedStep, reset, updateUser]);
 
   useGSAP(
     () => {
@@ -166,6 +177,7 @@ export default function OnboardingPage() {
       const field = fieldMap[sourceField] || sourceField;
       setError(field, { type: "validation", message: issue.message });
     });
+    setErrorFocusRequest((request) => request + 1);
   };
 
   const showServiceError = (error, fieldMap = {}) => {
@@ -177,6 +189,7 @@ export default function OnboardingPage() {
           message: detail.message,
         });
       });
+      setErrorFocusRequest((request) => request + 1);
       return;
     }
     setError("root", {
@@ -185,6 +198,7 @@ export default function OnboardingPage() {
         ? "We couldn't save this step. Check your connection and try again."
         : "This step couldn't be saved. Please try again.",
     });
+    setErrorFocusRequest((request) => request + 1);
   };
 
   const saveStep = async () => {
@@ -244,7 +258,8 @@ export default function OnboardingPage() {
     try {
       const response = await completeMutation.mutateAsync();
       updateUser({
-        ...response.user,
+        onboardingStatus: response.status,
+        onboardingStep: response.currentStep,
         firstName: values.firstName,
         lastName: values.lastName,
         sexForCalculation: values.sexForCalculation,
@@ -261,11 +276,29 @@ export default function OnboardingPage() {
     }
   };
 
+  const submitCurrentStep = (event) => {
+    event.preventDefault();
+    if (requestedStep === 3) {
+      finish();
+      return;
+    }
+    saveStep();
+  };
+
   const summary = useMemo(() => {
     const stepOne = buildStepOnePayload(values);
     const stepTwo = buildStepTwoPayload(values);
     return { ...stepOne, ...stepTwo };
   }, [values]);
+
+  const hasErrors = Object.keys(errors).length > 0;
+  const isSaving = saveMutation.isPending || completeMutation.isPending;
+
+  useEffect(() => {
+    // This effect runs after React has committed the error summary, so focus
+    // reliably reaches it instead of remaining on the submit button.
+    if (errorFocusRequest > 0) errorSummaryRef.current?.focus();
+  }, [errorFocusRequest]);
 
   if (onboarding.isLoading) {
     return <div className={styles.onboardingLoader}><Spinner size="lg" /><p>Bringing back your progress…</p></div>;
@@ -293,7 +326,9 @@ export default function OnboardingPage() {
             </span>
           ))}
         </div>
-        <span className={styles.saveState}>{saveMutation.isPending ? "Saving…" : "Progress saves each step"}</span>
+        <span className={styles.saveState} role="status" aria-live="polite">
+          {saveMutation.isPending ? "Saving…" : "Progress saves each step"}
+        </span>
       </header>
 
       <main className={styles.formLayout}>
@@ -322,34 +357,50 @@ export default function OnboardingPage() {
         </section>
 
         <section ref={formPaneRef} className={styles.formPane}>
-          <div ref={panelRef} className={styles.stepPanel} key={requestedStep}>
+          <form
+            ref={panelRef}
+            className={styles.stepPanel}
+            key={requestedStep}
+            onSubmit={submitCurrentStep}
+            aria-busy={isSaving}
+            noValidate
+          >
             <header className={styles.stepHeader}>
               <p>{STEP_META[requestedStep].eyebrow} <span>Step {requestedStep} of 3</span></p>
-              <h1>{STEP_META[requestedStep].title}</h1>
+              <h1 ref={stepHeadingRef} tabIndex="-1">{STEP_META[requestedStep].title}</h1>
               <div>{STEP_META[requestedStep].note}</div>
             </header>
 
-            {errors.root && (
-              <div className={styles.formError} role="alert">
-                <span>!</span><p>{errors.root.message}</p>
+            {hasErrors && (
+              <div
+                ref={errorSummaryRef}
+                className={styles.formError}
+                role="alert"
+                tabIndex="-1"
+              >
+                <span aria-hidden="true">!</span>
+                <div>
+                  <strong>Check this step</strong>
+                  <p>{errors.root?.message || "Some details need your attention. The fields below explain what to fix."}</p>
+                </div>
               </div>
             )}
 
             {requestedStep === 1 && (
               <div className={styles.stepContent}>
                 <div className={styles.nameGrid}>
-                  <Field label="First name" error={errors.firstName?.message}>
-                    <input className={styles.textInput} aria-label="First name" autoComplete="given-name" placeholder="Your first name" {...register("firstName")} />
+                  <Field label="First name" error={errors.firstName?.message} messageId="first-name-message">
+                    <input className={styles.textInput} aria-label="First name" aria-invalid={Boolean(errors.firstName)} aria-describedby={errors.firstName ? "first-name-message" : undefined} autoComplete="given-name" placeholder="Your first name" {...register("firstName")} />
                   </Field>
-                  <Field label="Second name" error={errors.lastName?.message}>
-                    <input className={styles.textInput} aria-label="Second name" autoComplete="family-name" placeholder="Your second name" {...register("lastName")} />
+                  <Field label="Last name" error={errors.lastName?.message} messageId="last-name-message">
+                    <input className={styles.textInput} aria-label="Last name" aria-invalid={Boolean(errors.lastName)} aria-describedby={errors.lastName ? "last-name-message" : undefined} autoComplete="family-name" placeholder="Your last name" {...register("lastName")} />
                   </Field>
                   <fieldset className={styles.birthDateField}>
                     <legend>Date of birth</legend>
-                    <input className={styles.textInput} aria-label="Date of birth" type="date" {...register("birthDate")} />
-                    <small>Choose your complete date. You must be 18 or older.</small>
+                    <input className={styles.textInput} aria-label="Date of birth" aria-invalid={Boolean(errors.birthDay || errors.birthMonth || errors.birthYear)} aria-describedby={`birth-date-hint${errors.birthDay || errors.birthMonth || errors.birthYear ? " birth-date-error" : ""}`} type="date" {...register("birthDate")} />
+                    <small id="birth-date-hint">Choose your complete date. You must be 18 or older.</small>
                     {(errors.birthDay || errors.birthMonth || errors.birthYear) && (
-                      <small className={styles.fieldError} role="alert">{errors.birthDay?.message || errors.birthMonth?.message || errors.birthYear?.message}</small>
+                      <small id="birth-date-error" className={styles.fieldError}>{errors.birthDay?.message || errors.birthMonth?.message || errors.birthYear?.message}</small>
                     )}
                   </fieldset>
                 </div>
@@ -358,10 +409,10 @@ export default function OnboardingPage() {
                   <legend>Sex used for fitness calculations</legend>
                   <p>This helps future energy estimates. It isn&apos;t your gender identity.</p>
                   <div className={styles.sexOptions}>
-                    <SelectionCard name="sexForCalculation" value="MALE" register={register} selected={selectedSex === "MALE"} title="Male" note="Use male calculation constants" symbol="M" />
-                    <SelectionCard name="sexForCalculation" value="FEMALE" register={register} selected={selectedSex === "FEMALE"} title="Female" note="Use female calculation constants" symbol="F" />
+                    <SelectionCard name="sexForCalculation" value="MALE" register={register} selected={selectedSex === "MALE"} title="Male" note="Use the male energy-estimate formula" symbol="M" describedBy={errors.sexForCalculation ? "sex-error" : undefined} />
+                    <SelectionCard name="sexForCalculation" value="FEMALE" register={register} selected={selectedSex === "FEMALE"} title="Female" note="Use the female energy-estimate formula" symbol="F" describedBy={errors.sexForCalculation ? "sex-error" : undefined} />
                   </div>
-                  {errors.sexForCalculation && <small className={styles.fieldError} role="alert">{errors.sexForCalculation.message}</small>}
+                  {errors.sexForCalculation && <small id="sex-error" className={styles.fieldError}>{errors.sexForCalculation.message}</small>}
                 </fieldset>
 
                 <div className={styles.measureHeader}>
@@ -378,33 +429,33 @@ export default function OnboardingPage() {
 
                 {unitSystem === "METRIC" ? (
                   <div className={styles.measureGrid}>
-                    <Field label="Height" error={errors.heightCm?.message}>
-                      <div className={styles.inputWithUnit}><input aria-label="Height" type="number" step="0.1" inputMode="decimal" placeholder="178" {...register("heightCm", { valueAsNumber: true })} /><span>cm</span></div>
+                    <Field label="Height" error={errors.heightCm?.message} messageId="height-cm-message">
+                      <div className={styles.inputWithUnit}><input aria-label="Height" aria-invalid={Boolean(errors.heightCm)} aria-describedby={errors.heightCm ? "height-cm-message" : undefined} type="number" step="0.1" inputMode="decimal" placeholder="178" {...register("heightCm", { valueAsNumber: true })} /><span>cm</span></div>
                     </Field>
-                    <Field label="Current weight" error={errors.currentWeightKg?.message}>
-                      <div className={styles.inputWithUnit}><input aria-label="Current weight" type="number" step="0.1" inputMode="decimal" placeholder="82.5" {...register("currentWeightKg", { valueAsNumber: true })} /><span>kg</span></div>
+                    <Field label="Current weight" error={errors.currentWeightKg?.message} messageId="weight-kg-message">
+                      <div className={styles.inputWithUnit}><input aria-label="Current weight" aria-invalid={Boolean(errors.currentWeightKg)} aria-describedby={errors.currentWeightKg ? "weight-kg-message" : undefined} type="number" step="0.1" inputMode="decimal" placeholder="82.5" {...register("currentWeightKg", { valueAsNumber: true })} /><span>kg</span></div>
                     </Field>
                   </div>
                 ) : (
                   <div className={styles.measureGridImperial}>
-                    <Field label="Height" error={errors.heightFeet?.message}>
+                    <Field label="Height" error={errors.heightFeet?.message} messageId="height-imperial-message">
                       <div className={styles.heightInputs}>
-                        <div className={styles.inputWithUnit}><input aria-label="Height feet" type="number" inputMode="numeric" placeholder="5" {...register("heightFeet", { valueAsNumber: true })} /><span>ft</span></div>
-                        <div className={styles.inputWithUnit}><input aria-label="Height inches" type="number" inputMode="numeric" placeholder="10" {...register("heightInches", { valueAsNumber: true })} /><span>in</span></div>
+                        <div className={styles.inputWithUnit}><input aria-label="Height feet" aria-invalid={Boolean(errors.heightFeet)} aria-describedby={errors.heightFeet ? "height-imperial-message" : undefined} type="number" inputMode="numeric" placeholder="5" {...register("heightFeet", { valueAsNumber: true })} /><span>ft</span></div>
+                        <div className={styles.inputWithUnit}><input aria-label="Height inches" aria-invalid={Boolean(errors.heightFeet)} aria-describedby={errors.heightFeet ? "height-imperial-message" : undefined} type="number" inputMode="numeric" placeholder="10" {...register("heightInches", { valueAsNumber: true })} /><span>in</span></div>
                       </div>
                     </Field>
-                    <Field label="Current weight" error={errors.currentWeightLb?.message}>
-                      <div className={styles.inputWithUnit}><input aria-label="Current weight" type="number" step="0.1" inputMode="decimal" placeholder="182" {...register("currentWeightLb", { valueAsNumber: true })} /><span>lb</span></div>
+                    <Field label="Current weight" error={errors.currentWeightLb?.message} messageId="weight-lb-message">
+                      <div className={styles.inputWithUnit}><input aria-label="Current weight" aria-invalid={Boolean(errors.currentWeightLb)} aria-describedby={errors.currentWeightLb ? "weight-lb-message" : undefined} type="number" step="0.1" inputMode="decimal" placeholder="182" {...register("currentWeightLb", { valueAsNumber: true })} /><span>lb</span></div>
                     </Field>
                   </div>
                 )}
 
                 <label className={styles.confirmation} data-checked={values.adultConfirmed || undefined}>
-                  <input type="checkbox" {...register("adultConfirmed")} />
+                  <input type="checkbox" aria-invalid={Boolean(errors.adultConfirmed)} aria-describedby={errors.adultConfirmed ? "adult-confirmation-error" : undefined} {...register("adultConfirmed")} />
                   <i aria-hidden="true">✓</i>
                   <span><strong>I confirm I&apos;m 18 or older.</strong><small>Spotter&apos;s MVP fitness onboarding is for adults.</small></span>
                 </label>
-                {errors.adultConfirmed && <small className={styles.fieldError} role="alert">{errors.adultConfirmed.message}</small>}
+                {errors.adultConfirmed && <small id="adult-confirmation-error" className={styles.fieldError}>{errors.adultConfirmed.message}</small>}
               </div>
             )}
 
@@ -414,22 +465,22 @@ export default function OnboardingPage() {
                   <legend>What matters most right now?</legend>
                   <div className={styles.goalGrid}>
                     {Object.entries(GOAL_COPY).map(([value, copy], index) => (
-                      <SelectionCard key={value} name="goalType" value={value} register={register} selected={values.goalType === value} title={copy.label} note={copy.note} symbol={String(index + 1).padStart(2, "0")} />
+                      <SelectionCard key={value} name="goalType" value={value} register={register} selected={values.goalType === value} title={copy.label} note={copy.note} symbol={String(index + 1).padStart(2, "0")} describedBy={errors.goalType ? "goal-type-error" : undefined} />
                     ))}
                   </div>
-                  {errors.goalType && <small className={styles.fieldError} role="alert">{errors.goalType.message}</small>}
+                  {errors.goalType && <small id="goal-type-error" className={styles.fieldError}>{errors.goalType.message}</small>}
                 </fieldset>
 
                 {targetVisible && (
                   <div className={styles.targetRow}>
-                    <Field label={`Target weight${targetRequired ? "" : " (optional)"}`} error={(unitSystem === "IMPERIAL" ? errors.targetWeightLb : errors.targetWeightKg)?.message}>
+                    <Field label={`Target weight${targetRequired ? "" : " (optional)"}`} error={(unitSystem === "IMPERIAL" ? errors.targetWeightLb : errors.targetWeightKg)?.message} messageId="target-weight-message">
                       <div className={styles.inputWithUnit}>
-                        <input aria-label="Target weight" type="number" step="0.1" inputMode="decimal" placeholder={unitSystem === "IMPERIAL" ? "165" : "75"} {...register(unitSystem === "IMPERIAL" ? "targetWeightLb" : "targetWeightKg", { valueAsNumber: true })} />
+                        <input aria-label="Target weight" aria-invalid={Boolean(unitSystem === "IMPERIAL" ? errors.targetWeightLb : errors.targetWeightKg)} aria-describedby={(unitSystem === "IMPERIAL" ? errors.targetWeightLb : errors.targetWeightKg) ? "target-weight-message" : undefined} type="number" step="0.1" inputMode="decimal" placeholder={unitSystem === "IMPERIAL" ? "165" : "75"} {...register(unitSystem === "IMPERIAL" ? "targetWeightLb" : "targetWeightKg", { valueAsNumber: true })} />
                         <span>{unitSystem === "IMPERIAL" ? "lb" : "kg"}</span>
                       </div>
                     </Field>
-                    <Field label="Target date (optional)" error={errors.targetDate?.message}>
-                      <input className={styles.textInput} aria-label="Target date (optional)" type="date" {...register("targetDate")} />
+                    <Field label="Target date (optional)" error={errors.targetDate?.message} messageId="target-date-message">
+                      <input className={styles.textInput} aria-label="Target date (optional)" aria-invalid={Boolean(errors.targetDate)} aria-describedby={errors.targetDate ? "target-date-message" : undefined} type="date" {...register("targetDate")} />
                     </Field>
                   </div>
                 )}
@@ -438,27 +489,27 @@ export default function OnboardingPage() {
                   <legend>How active is life lately?</legend>
                   <div className={styles.activityGrid}>
                     {Object.entries(ACTIVITY_COPY).map(([value, copy], index) => (
-                      <SelectionCard key={value} name="activityLevel" value={value} register={register} selected={values.activityLevel === value} title={copy.label} note={copy.note} symbol={`0${index + 1}`} />
+                      <SelectionCard key={value} name="activityLevel" value={value} register={register} selected={values.activityLevel === value} title={copy.label} note={copy.note} symbol={`0${index + 1}`} describedBy={errors.activityLevel ? "activity-level-error" : undefined} />
                     ))}
                   </div>
-                  {errors.activityLevel && <small className={styles.fieldError} role="alert">{errors.activityLevel.message}</small>}
+                  {errors.activityLevel && <small id="activity-level-error" className={styles.fieldError}>{errors.activityLevel.message}</small>}
                 </fieldset>
               </div>
             )}
 
             {requestedStep === 3 && (
               <div className={styles.reviewGrid}>
-                <button type="button" className={styles.reviewCard} onClick={() => goToStep(1)}>
+                <button type="button" className={styles.reviewCard} aria-label="Edit your personal details" onClick={() => goToStep(1)}>
                   <span>01 / You</span><i aria-hidden="true">Edit ↗</i>
                   <h2>{summary.firstName} {summary.lastName}</h2>
                   <p>{summary.sexForCalculation === "FEMALE" ? "Female" : "Male"} calculation · Born {String(summary.birthDay).padStart(2, "0")}/{String(summary.birthMonth).padStart(2, "0")}/{summary.birthYear}</p>
                 </button>
-                <button type="button" className={styles.reviewCard} onClick={() => goToStep(1)}>
+                <button type="button" className={styles.reviewCard} aria-label="Edit your baseline measurements" onClick={() => goToStep(1)}>
                   <span>02 / Baseline</span><i aria-hidden="true">Edit ↗</i>
                   <h2>{summary.currentWeightKg || "—"} kg</h2>
                   <p>{summary.heightCm || "—"} cm tall · {summary.preferredUnitSystem?.toLowerCase()} display</p>
                 </button>
-                <button type="button" className={`${styles.reviewCard} ${styles.reviewWide}`} onClick={() => goToStep(2)}>
+                <button type="button" className={`${styles.reviewCard} ${styles.reviewWide}`} aria-label="Edit your goal and activity level" onClick={() => goToStep(2)}>
                   <span>03 / Direction</span><i aria-hidden="true">Edit ↗</i>
                   <h2>{GOAL_COPY[summary.goalType]?.label || "Choose a goal"}</h2>
                   <p>{ACTIVITY_COPY[summary.activityLevel]?.label || "Choose an activity level"}{summary.targetWeightKg ? ` · ${summary.targetWeightKg} kg target` : ""}</p>
@@ -477,16 +528,15 @@ export default function OnboardingPage() {
                 </button>
               ) : <span />}
               <button
-                type="button"
+                type="submit"
                 className={styles.continueButton}
-                onClick={requestedStep === 3 ? finish : saveStep}
                 disabled={saveMutation.isPending || completeMutation.isPending}
               >
-                <span>{saveMutation.isPending ? "Saving this step…" : completeMutation.isPending ? "Building your start…" : requestedStep === 3 ? "Complete my setup" : "Save and continue"}</span>
+                <span aria-live="polite">{saveMutation.isPending ? "Saving this step…" : completeMutation.isPending ? "Building your start…" : requestedStep === 3 ? "Complete my setup" : "Save and continue"}</span>
                 <i aria-hidden="true">↗</i>
               </button>
             </footer>
-          </div>
+          </form>
         </section>
       </main>
     </div>

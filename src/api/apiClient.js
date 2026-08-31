@@ -119,8 +119,7 @@ export async function refreshAuth() {
  *   - Only triggers on INVALID_ACCESS_TOKEN error code
  *   - Never triggers for auth endpoints (prevents loops)
  *   - Each original request retries at most once
- *   - Terminal errors (INVALID_CREDENTIALS, THEFT_DETECTED)
- *     clear auth state
+ *   - Terminal refresh/session errors clear auth state
  * ───────────────────────────────────────────────────────────── */
 apiClient.interceptors.response.use(
   // Success: pass through
@@ -159,11 +158,9 @@ apiClient.interceptors.response.use(
     } catch (refreshError) {
       const refreshCode = refreshError.response?.data?.code;
 
-      // Terminal session errors: clear auth
-      if (
-        refreshCode === "INVALID_CREDENTIALS" ||
-        refreshCode === "REFRESH_TOKEN_THEFT_DETECTED"
-      ) {
+      // Any rejected refresh means this browser no longer has a usable
+      // authenticated session. Keep the route guards aligned with the server.
+      if (refreshError.response?.status === 401 || refreshCode === "REFRESH_TOKEN_THEFT_DETECTED") {
         useAuthStore.getState().clearAuth();
       }
 

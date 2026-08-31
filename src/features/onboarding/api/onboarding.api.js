@@ -26,7 +26,12 @@ export const ONBOARDING_CONFIG = Object.freeze({
   },
 });
 
-const useMocks = import.meta.env.VITE_USE_ONBOARDING_MOCKS !== "false";
+// Production and local development must use the real API by default.
+// Mock state is memory-only and disappears on a full page reload, so making
+// it the implicit default can falsely send completed users back to onboarding.
+const useMocks =
+  import.meta.env.MODE === "test" ||
+  import.meta.env.VITE_USE_ONBOARDING_MOCKS === "true";
 const mockDelay = import.meta.env.MODE === "test" ? 0 : 360;
 
 const createInitialState = () => ({
@@ -53,9 +58,7 @@ export async function getOnboardingConfig() {
 
 export async function loadOnboarding() {
   if (!useMocks) {
-    const response = await apiClient.get("/api/onboarding", {
-      headers: { "Cache-Control": "no-store" },
-    });
+    const response = await apiClient.get("/api/onboarding");
     return response.data;
   }
 
@@ -102,10 +105,9 @@ export async function completeOnboarding() {
 
   return {
     message: "Fitness onboarding completed.",
-    user: {
-      onboardingStatus: "completed",
-      onboardingStep: null,
-    },
+    status: mockState.status,
+    currentStep: mockState.currentStep,
+    completedSteps: [...mockState.completedSteps],
   };
 }
 

@@ -1,0 +1,122 @@
+.editor {
+  position: sticky;
+  top: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  background: var(--color-surface-elevated);
+  box-shadow: 0 24px 60px rgba(47, 65, 86, 0.13);
+}
+
+.editorHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.editorHeader h2 { margin: .2rem 0 .4rem; font-size: clamp(1.4rem, 2vw, 1.75rem); }
+.eyebrow { color: var(--color-text-secondary); font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.editorDescription { color: var(--color-text-muted); max-width: 54ch; font-size: .925rem; }
+.closeButton { display: grid; flex: 0 0 44px; width: 44px; height: 44px; place-items: center; border-radius: 50%; color: var(--color-text-heading); transition: background var(--transition-fast); }
+.closeButton:hover { background: var(--color-surface-secondary); }
+.closeButton svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+.form { display: flex; flex-direction: column; max-height: min(72vh, 780px); }
+.formBody { display: grid; gap: 1.25rem; overflow-y: auto; padding: 1.5rem; overscroll-behavior: contain; }
+.formFooter { display: flex; justify-content: flex-end; gap: .5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--color-border); background: color-mix(in srgb, var(--color-surface-secondary) 45%, white); }
+.field { display: grid; gap: .35rem; }
+.field > label, .tagField > label, .choiceFieldset > legend { color: var(--color-text-heading); font-size: .875rem; font-weight: 750; }
+.hint { color: var(--color-text-muted); font-size: .8rem; line-height: 1.4; }
+.control { width: 100%; min-height: 46px; padding: .68rem .8rem; border: 1px solid var(--color-border); border-radius: .75rem; background: var(--color-surface-primary); color: var(--color-text-primary); font-size: 1rem; transition: border-color var(--transition-fast), box-shadow var(--transition-fast); }
+.control:hover:not(:disabled) { border-color: var(--color-border-hover); }
+.control:focus { outline: none; border-color: var(--color-focus-ring); box-shadow: 0 0 0 3px rgba(86, 124, 141, .16); }
+.control[aria-invalid="true"] { border-color: var(--color-error); }
+.textarea { min-height: 104px; resize: vertical; }
+.fieldError { color: var(--color-error); font-size: .8rem; }
+.errorSummary { display: grid; gap: .15rem; margin: 1rem 1.5rem 0; padding: .85rem 1rem; border: 1px solid color-mix(in srgb, var(--color-error) 34%, white); border-radius: .8rem; background: var(--color-error-light); color: var(--color-error); font-size: .875rem; }
+
+.formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.fullWidth { grid-column: 1 / -1; }
+.sectionBlock { display: grid; gap: 1rem; padding-top: .25rem; }
+.sectionBlock + .sectionBlock { padding-top: 1.25rem; border-top: 1px solid var(--color-border); }
+.sectionHeading h3 { font-size: 1rem; margin-bottom: .15rem; }
+.sectionHeading p { color: var(--color-text-muted); font-size: .82rem; }
+
+.toggleRow { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 58px; padding: .7rem .8rem; border: 1px solid var(--color-border); border-radius: .8rem; cursor: pointer; }
+.toggleRow > span:first-child { display: grid; gap: .15rem; }
+.toggleRow strong { font-size: .9rem; }
+.toggleRow small { color: var(--color-text-muted); font-size: .78rem; }
+.toggleRow input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle { position: relative; flex: 0 0 44px; width: 44px; height: 26px; border-radius: 999px; background: var(--color-border); transition: background var(--transition-fast); }
+.toggle span { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: white; box-shadow: var(--shadow-sm); transition: transform var(--transition-fast); }
+.toggleRow input:checked + .toggle { background: var(--color-interactive-primary); }
+.toggleRow input:checked + .toggle span { transform: translateX(18px); }
+.toggleRow input:focus-visible + .toggle { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+
+.choiceFieldset { display: grid; gap: .6rem; border: 0; }
+.choiceGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+.choiceCard { position: relative; min-height: 64px; padding: .75rem; border: 1px solid var(--color-border); border-radius: .8rem; cursor: pointer; transition: border-color var(--transition-fast), background var(--transition-fast); }
+.choiceCard:hover { border-color: var(--color-border-hover); }
+.choiceCard:has(input:checked) { border-color: var(--color-interactive-primary); background: color-mix(in srgb, var(--color-border) 30%, white); }
+.choiceCard input { position: absolute; opacity: 0; }
+.choiceCard:has(input:focus-visible) { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+.choiceCard span { display: grid; gap: .12rem; }
+.choiceCard strong { font-size: .86rem; }
+.choiceCard small { color: var(--color-text-muted); font-size: .76rem; line-height: 1.35; }
+
+.tagField { display: grid; gap: .4rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tag { display: inline-flex; align-items: center; gap: .25rem; min-height: 32px; padding: .25rem .35rem .25rem .65rem; border-radius: 999px; background: var(--color-surface-secondary); color: var(--color-text-heading); font-size: .78rem; font-weight: 650; }
+.tag button { display: grid; width: 26px; height: 26px; place-items: center; border-radius: 50%; font-size: 1rem; }
+.tag button:hover { background: var(--color-border); }
+.tagComposer { display: grid; grid-template-columns: 1fr auto; gap: .5rem; }
+
+.stepHeader { display: grid; gap: .25rem; }
+.stepHeader > span { color: var(--color-text-secondary); font-size: .72rem; font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
+.stepHeader h3 { font-size: 1.1rem; }
+.stepHeader p { color: var(--color-text-muted); font-size: .84rem; }
+.stepDots { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: .3rem; margin-top: .5rem; }
+.stepDots i { height: 4px; border-radius: 99px; background: var(--color-border); }
+.stepDots i[data-active="true"] { background: var(--color-interactive-primary); }
+.stepActions { display: flex; justify-content: flex-end; gap: .5rem; }
+
+.dynamicList { display: grid; gap: .65rem; }
+.dynamicRow { display: grid; grid-template-columns: 1fr 1fr auto; align-items: end; gap: .55rem; padding: .75rem; border: 1px solid var(--color-border); border-radius: .8rem; }
+.removeButton { display: grid; width: 44px; height: 44px; place-items: center; border-radius: .7rem; color: var(--color-error); }
+.removeButton:hover { background: var(--color-error-light); }
+.addButton { justify-self: start; }
+.dayGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+.dayChoice { position: relative; display: grid; min-height: 58px; place-items: center; border: 1px solid var(--color-border); border-radius: .75rem; cursor: pointer; font-size: .8rem; font-weight: 650; }
+.dayChoice input { position: absolute; opacity: 0; }
+.dayChoice:has(input:checked) { border-color: var(--color-interactive-primary); background: color-mix(in srgb, var(--color-border) 30%, white); }
+.dayChoice:has(input:focus-visible) { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+
+.dangerZone { margin: 0 1.5rem 1.5rem; border: 1px solid color-mix(in srgb, var(--color-error) 30%, white); border-radius: .85rem; background: var(--color-error-light); }
+.dangerZone summary { min-height: 44px; padding: .75rem 1rem; color: var(--color-error); font-weight: 700; cursor: pointer; }
+.dangerBody { display: grid; gap: .75rem; padding: 0 1rem 1rem; font-size: .85rem; }
+.dangerBody ul { padding-left: 1.2rem; }
+
+.formBody details { border: 1px solid var(--color-border); border-radius: .8rem; }
+.formBody summary { display: flex; align-items: center; min-height: 46px; padding: .65rem .8rem; color: var(--color-text-heading); font-size: .875rem; font-weight: 700; cursor: pointer; }
+.formBody details[open] summary { border-bottom: 1px solid var(--color-border); }
+.formBody details > .sectionBlock, .formBody details > .dynamicList { padding: .9rem; }
+.closeButton:active, .removeButton:active, .tag button:active { transform: scale(.96); }
+.choiceCard:active, .dayChoice:active { background: var(--color-surface-secondary); }
+
+@media (max-width: 920px) {
+  .editor { position: static; }
+  .form { max-height: none; }
+}
+
+@media (max-width: 560px) {
+  .editorHeader, .formBody { padding: 1.1rem; }
+  .formFooter { position: sticky; bottom: 0; padding: .85rem 1.1rem; }
+  .formGrid, .choiceGrid { grid-template-columns: 1fr; }
+  .dayGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dynamicRow { grid-template-columns: 1fr; }
+  .dynamicRow .removeButton { justify-self: end; }
+  .dangerZone { margin: 0 1.1rem 1.1rem; }
+}

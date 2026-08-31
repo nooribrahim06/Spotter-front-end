@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 // Layouts
@@ -23,12 +24,14 @@ import OnboardingWelcomePage from "../pages/onboarding/OnboardingWelcomePage.jsx
 import OnboardingPage from "../pages/onboarding/OnboardingPage.jsx";
 import OnboardingSuccessPage from "../pages/onboarding/OnboardingSuccessPage.jsx";
 
+const ProfilePage = lazy(() => import("../pages/app/ProfilePage.jsx"));
+
 /**
  * Global Route Configuration
  *
  * Uses data router (createBrowserRouter). Loaders/actions are deferred.
  */
-export const router = createBrowserRouter([
+export const routes = [
   {
     element: <PublicLayout />,
     children: [
@@ -98,6 +101,14 @@ export const router = createBrowserRouter([
         element: <AuthGuard />,
         children: [
           {
+            path: "profile",
+            element: (
+              <Suspense fallback={<p role="status">Loading profile…</p>}>
+                <ProfilePage />
+              </Suspense>
+            ),
+          },
+          {
             element: <OnboardingGate />,
             children: [
               {
@@ -120,4 +131,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);

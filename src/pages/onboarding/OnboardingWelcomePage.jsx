@@ -12,6 +12,7 @@ import styles from "./Onboarding.module.css";
 export default function OnboardingWelcomePage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const updateUser = useAuthStore((state) => state.updateUser);
   const onboarding = useQuery({
     queryKey: ["onboarding"],
     queryFn: loadOnboarding,
@@ -21,6 +22,15 @@ export default function OnboardingWelcomePage() {
   useEffect(() => {
     document.title = "Your starting point — Spotter";
   }, []);
+
+  useEffect(() => {
+    if (onboarding.data?.status !== "completed") return;
+    updateUser({
+      onboardingStatus: onboarding.data.status,
+      onboardingStep: onboarding.data.currentStep,
+    });
+    navigate("/app/home", { replace: true });
+  }, [navigate, onboarding.data?.currentStep, onboarding.data?.status, updateUser]);
 
   const begin = () => {
     const nextStep = onboarding.data?.status === "in_progress"
