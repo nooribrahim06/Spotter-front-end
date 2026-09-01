@@ -22,7 +22,8 @@ export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const menuRef = useRef(null);
-  const displayName = user?.firstName || user?.displayName || user?.username || "Spotter member";
+  const triggerRef = useRef(null);
+  const displayName = user?.displayName || user?.firstName || user?.username || "Spotter member";
   const initial = displayName.trim().charAt(0).toUpperCase() || "S";
 
   useEffect(() => {
@@ -31,7 +32,10 @@ export default function AccountMenu() {
       if (!menuRef.current?.contains(event.target)) setIsOpen(false);
     };
     const closeOnEscape = (event) => {
-      if (event.key === "Escape") setIsOpen(false);
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     document.addEventListener("pointerdown", closeOutside);
     document.addEventListener("keydown", closeOnEscape);
@@ -39,6 +43,10 @@ export default function AccountMenu() {
       document.removeEventListener("pointerdown", closeOutside);
       document.removeEventListener("keydown", closeOnEscape);
     };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) menuRef.current?.querySelector('[role="menuitem"]')?.focus();
   }, [isOpen]);
 
   useEffect(() => {
@@ -55,36 +63,66 @@ export default function AccountMenu() {
     setIsConfirming(true);
   };
 
+  const handleMenuKeys = (event) => {
+    const items = Array.from(event.currentTarget.querySelectorAll('[role="menuitem"]'));
+    const current = items.indexOf(document.activeElement);
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      items[(current + 1) % items.length]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      items[(current - 1 + items.length) % items.length]?.focus();
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      items[0]?.focus();
+    } else if (event.key === "End") {
+      event.preventDefault();
+      items.at(-1)?.focus();
+    }
+  };
+
   return (
-    <div className={styles.account} ref={menuRef}>
+    <div className={styles.account} ref={menuRef} onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
+    }}>
       <button
+        ref={triggerRef}
         type="button"
         className={styles.accountTrigger}
         aria-expanded={isOpen}
         aria-haspopup="menu"
+        aria-controls="spotter-account-menu"
+        aria-label={`Your profile, ${displayName}`}
         onClick={() => setIsOpen((open) => !open)}
+        onKeyDown={(event) => {
+          if (["ArrowDown", "ArrowUp"].includes(event.key)) {
+            event.preventDefault();
+            setIsOpen(true);
+          }
+        }}
       >
-        <span className={styles.accountAvatar} aria-hidden="true">{initial}</span>
-        <span className={styles.accountCopy}>
-          <small>Your profile</small>
-          <strong>{displayName}</strong>
+        <span className={styles.accountAvatar} aria-hidden="true">
+          {user?.profilePhotoUrl ? <img src={user.profilePhotoUrl} alt="" /> : initial}
         </span>
+        <strong className={styles.accountName}>{displayName}</strong>
         <span className={styles.accountChevron}><ChevronIcon /></span>
       </button>
 
       {isOpen && (
-        <div className={styles.accountPopover} role="menu">
+        <div id="spotter-account-menu" className={styles.accountPopover} role="menu" onKeyDown={handleMenuKeys}>
           <div className={styles.accountPopoverHead}>
-            <span className={styles.accountAvatar} aria-hidden="true">{initial}</span>
-            <span><strong>{displayName}</strong><small>@{user?.username || "spotter"}</small></span>
+            <span className={styles.accountAvatar} aria-hidden="true">
+              {user?.profilePhotoUrl ? <img src={user.profilePhotoUrl} alt="" /> : initial}
+            </span>
+            <span><strong>{displayName}</strong>{user?.username && <small>@{user.username}</small>}</span>
           </div>
           <Link to="/app/profile" role="menuitem" onClick={() => setIsOpen(false)}>
             <span><ProfileIcon /></span>
-            <span><strong>View profile</strong><small>Your details and preferences</small></span>
+            <span><strong>Profile</strong></span>
           </Link>
           <button type="button" role="menuitem" className={styles.logoutItem} onClick={requestLogout}>
             <span><ExitIcon /></span>
-            <span><strong>Log out</strong><small>End this Spotter session</small></span>
+            <span><strong>Log out</strong></span>
           </button>
         </div>
       )}

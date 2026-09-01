@@ -25,6 +25,7 @@ import OnboardingPage from "../pages/onboarding/OnboardingPage.jsx";
 import OnboardingSuccessPage from "../pages/onboarding/OnboardingSuccessPage.jsx";
 
 const ProfilePage = lazy(() => import("../pages/app/ProfilePage.jsx"));
+const GoalsPage = lazy(() => import("../pages/app/GoalsPage.jsx"));
 
 /**
  * Global Route Configuration
@@ -119,6 +120,14 @@ export const routes = [
                 path: "home",
                 element: <HomePage />,
                 handle: { immersive: true },
+              },
+              {
+                path: "goals",
+                element: (
+                  <Suspense fallback={<p role="status">Loading your goals…</p>}>
+                    <GoalsPage />
+                  </Suspense>
+                ),
               },
               {
                 path: "*",

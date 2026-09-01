@@ -26,8 +26,8 @@ describe("AccountMenu", () => {
     const user = userEvent.setup();
     renderWithProviders(<AccountMenu />);
 
-    await user.click(screen.getByRole("button", { name: /your profile nour/i }));
-    expect(screen.getByRole("menuitem", { name: /view profile/i })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /your profile, nour/i }));
+    expect(screen.getByRole("menuitem", { name: /^profile$/i })).toBeInTheDocument();
     await user.click(screen.getByRole("menuitem", { name: /log out/i }));
 
     expect(screen.getByRole("dialog", { name: "Log out of Spotter?" })).toBeInTheDocument();
@@ -37,9 +37,25 @@ describe("AccountMenu", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(logoutMock).not.toHaveBeenCalled();
 
-    await user.click(screen.getByRole("button", { name: /your profile nour/i }));
+    await user.click(screen.getByRole("button", { name: /your profile, nour/i }));
     await user.click(screen.getByRole("menuitem", { name: /log out/i }));
     await user.click(screen.getByRole("button", { name: "Yes, log me out" }));
     expect(logoutMock).toHaveBeenCalledOnce();
+  });
+
+  it("opens and moves through account actions from the keyboard", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<AccountMenu />);
+
+    const trigger = screen.getByRole("button", { name: /your profile, nour/i });
+    trigger.focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(screen.getByRole("menuitem", { name: /^profile$/i })).toHaveFocus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("menuitem", { name: /log out/i })).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(trigger).toHaveFocus();
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 });

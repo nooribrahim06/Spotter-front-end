@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -13,7 +12,7 @@ import { ChapterFinal } from "../components/landing/ChapterFinal.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function LandingPage({ authenticated = false, user, onLogout, isLoggingOut = false }) {
+export default function LandingPage({ authenticated = false }) {
   const storyRef = useRef(null);
 
   useGSAP(
@@ -96,9 +95,9 @@ export default function LandingPage({ authenticated = false, user, onLogout, isL
             )
             .set(outgoing, { autoAlpha: 0 }, at + 0.98);
 
-          if (to === "coaching") {
+          if (nav && to === "coaching") {
             master.set(nav, { attr: { "data-tone": "dark" } }, at + 0.5);
-          } else if (from === "coaching") {
+          } else if (nav && from === "coaching") {
             master.set(nav, { attr: { "data-tone": "light" } }, at + 0.5);
           }
         };
@@ -176,7 +175,7 @@ export default function LandingPage({ authenticated = false, user, onLogout, isL
       <CursorOrb />
       <span id="journey" className={styles.journeyAnchor} aria-hidden="true" />
       <div className={styles.stage}>
-        <header className={styles.topbar} data-nav data-tone="light" aria-label="Primary navigation">
+        {!authenticated && <header className={styles.topbar} data-nav data-tone="light" aria-label="Primary navigation">
           <a className={styles.brand} href="#top" aria-label="Spotter home">
             SPOTTER<span>.</span>
           </a>
@@ -184,22 +183,10 @@ export default function LandingPage({ authenticated = false, user, onLogout, isL
           <p className={styles.navTagline}><i /> Move. Learn. Connect.</p>
 
           <nav className={styles.topActions} aria-label="Account">
-            {authenticated ? (
-              <>
-                <span className={styles.navUser}>Hi, {user?.username || "Spotter"}</span>
-                <Link className={styles.signInLink} to="/app/profile">Profile</Link>
-                <button className={styles.navCta} type="button" onClick={onLogout} disabled={isLoggingOut}>
-                  {isLoggingOut ? "Signing out…" : "Log out"} <span aria-hidden="true">↗</span>
-                </button>
-              </>
-            ) : (
-              <>
-                <a className={styles.signInLink} href="/login">Sign in</a>
-                <a className={styles.navCta} href="/signup">Start free <span aria-hidden="true">↗</span></a>
-              </>
-            )}
+            <a className={styles.signInLink} href="/login">Sign in</a>
+            <a className={styles.navCta} href="/signup">Start free <span aria-hidden="true">↗</span></a>
           </nav>
-        </header>
+        </header>}
 
         <div id="top" className={styles.sceneStack}>
           <ChapterIdentity authenticated={authenticated} />
