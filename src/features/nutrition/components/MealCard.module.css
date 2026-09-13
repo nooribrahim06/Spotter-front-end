@@ -1,0 +1,265 @@
+.card {
+  border: 1px solid rgba(25, 59, 61, .1);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, .95);
+  overflow: hidden;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+.card:hover {
+  border-color: rgba(25, 59, 61, .16);
+  box-shadow: 0 4px 16px rgba(25, 59, 61, .06);
+}
+
+/* ── Header (clickable expand trigger) ──────────────────── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  width: 100%;
+  padding: .9rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .14s ease;
+}
+
+.header:hover {
+  background: rgba(230, 240, 243, .3);
+}
+
+.header:focus-visible {
+  outline: 3px solid rgba(79, 132, 133, .28);
+  outline-offset: -3px;
+  border-radius: 1rem;
+}
+
+.typeIcon {
+  display: grid;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: .6rem;
+  background: #f0f6f7;
+  color: #4f8485;
+  margin-top: .1rem;
+}
+
+.headerContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+}
+
+.title {
+  font-size: .82rem;
+  font-weight: 800;
+  color: #193b3d;
+  margin: 0;
+}
+
+.time {
+  font-size: .68rem;
+  font-weight: 600;
+  color: #6b8a8c;
+}
+
+.itemSummary {
+  font-size: .68rem;
+  font-weight: 600;
+  color: #6b8a8c;
+  margin: 0;
+}
+
+.noteHint {
+  color: #9ba8a9;
+  font-style: italic;
+}
+
+.chevron {
+  display: grid;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: #8fa7a8;
+  margin-top: .3rem;
+  transition: transform .2s ease, color .14s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+  color: #4f8485;
+}
+
+/* ── Body (expanded) ────────────────────────────────────── */
+
+.body {
+  padding: 0 1rem 1rem;
+  animation: slideDown .2s ease-out;
+}
+
+.itemList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .6rem;
+  border-radius: .55rem;
+  background: #f7fafb;
+  transition: background-color .14s ease;
+}
+
+.item:hover {
+  background: #eef4f5;
+}
+
+.itemBadge {
+  display: grid;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: .4rem;
+  font-size: .6rem;
+  font-weight: 900;
+  letter-spacing: .03em;
+}
+
+.itemBadge[data-type="FOOD"]   { background: #e8f4fd; color: #3b82d9; }
+.itemBadge[data-type="RECIPE"] { background: #fef3e2; color: #c97d1a; }
+.itemBadge[data-type="QUICK"]  { background: #f3eef8; color: #8b5fc7; }
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .05rem;
+}
+
+.itemName {
+  font-size: .74rem;
+  font-weight: 700;
+  color: #193b3d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemDetail {
+  font-size: .64rem;
+  font-weight: 600;
+  color: #8fa7a8;
+}
+
+.itemCal {
+  font-size: .7rem;
+  font-weight: 800;
+  color: #3f5f6b;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Notes ───────────────────────────────────────────────── */
+
+.notes {
+  margin-top: .65rem;
+  padding: .6rem .7rem;
+  border-radius: .5rem;
+  background: #fdfcfb;
+  border: 1px solid rgba(25, 59, 61, .06);
+}
+
+.notesLabel {
+  display: block;
+  font-size: .6rem;
+  font-weight: 800;
+  color: #8fa7a8;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: .25rem;
+}
+
+.notesText {
+  margin: 0;
+  font-size: .76rem;
+  color: #3f5f6b;
+  line-height: 1.5;
+}
+
+/* ── Actions ─────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  gap: .45rem;
+  margin-top: .75rem;
+  padding-top: .65rem;
+  border-top: 1px solid rgba(25, 59, 61, .08);
+}
+
+.editBtn,
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .4rem .7rem;
+  border-radius: .45rem;
+  font-size: .68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color .14s ease, color .14s ease;
+}
+
+.editBtn {
+  color: #4f8485;
+  background: transparent;
+}
+
+.editBtn:hover {
+  background: rgba(79, 132, 133, .1);
+  color: #193b3d;
+}
+
+.deleteBtn {
+  color: #c44a3f;
+  background: transparent;
+}
+
+.deleteBtn:hover {
+  background: rgba(196, 74, 63, .08);
+  color: #9b3a31;
+}
+
+.editBtn:focus-visible,
+.deleteBtn:focus-visible {
+  outline: 3px solid rgba(79, 132, 133, .28);
+  outline-offset: -1px;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body { animation: none; }
+  .chevron { transition: none; }
+}

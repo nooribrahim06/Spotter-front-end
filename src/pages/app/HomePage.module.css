@@ -1,0 +1,219 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 680px;
+  margin: 0 auto;
+  padding-bottom: 5rem; /* space for FAB */
+}
+
+/* ── Skeleton ────────────────────────────────────────────── */
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeletonCards {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dateControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dateButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(25, 59, 61, 0.15);
+  background: white;
+  color: #193b3d;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dateButton:hover:not(:disabled) {
+  background: #f0f6f7;
+  border-color: rgba(25, 59, 61, 0.3);
+}
+
+.dateButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.todayButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2rem;
+  padding: 0 0.8rem;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(25, 59, 61, 0.15);
+  background: white;
+  color: #193b3d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.todayButton:hover:not(:disabled) {
+  background: #f0f6f7;
+  border-color: rgba(25, 59, 61, 0.3);
+}
+
+.todayButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(1.6rem, 5vw, 2rem);
+  font-weight: 900;
+  color: #193b3d;
+  letter-spacing: -.02em;
+}
+
+.date {
+  font-size: .78rem;
+  font-weight: 600;
+  color: #6b8a8c;
+}
+
+/* ── Empty state action ──────────────────────────────────── */
+
+.emptyAction {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .65rem 1.3rem;
+  border-radius: .6rem;
+  background: #193b3d;
+  color: white;
+  font-size: .78rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition: background-color .16s ease;
+}
+
+.emptyAction:hover {
+  background: #102e30;
+}
+
+/* ── Meal groups ─────────────────────────────────────────── */
+
+.mealGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.mealGroup {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: .72rem;
+  font-weight: 800;
+  color: #6b8a8c;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.groupCards {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+/* ── Floating Action Button ──────────────────────────────── */
+
+.fab {
+  position: fixed;
+  z-index: 50;
+  right: clamp(1rem, 4vw, 2.5rem);
+  bottom: clamp(1.5rem, 4vw, 2rem);
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .75rem 1.3rem;
+  border-radius: .85rem;
+  background: #193b3d;
+  color: white;
+  font-size: .78rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(25, 59, 61, .25), 0 2px 8px rgba(25, 59, 61, .12);
+  transition: background-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+.fab:hover {
+  background: #102e30;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 36px rgba(25, 59, 61, .3), 0 3px 10px rgba(25, 59, 61, .15);
+}
+
+.fab:active {
+  transform: translateY(0);
+}
+
+.fab:focus-visible {
+  outline: 3px solid rgba(79, 132, 133, .4);
+  outline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .fab {
+    right: 1rem;
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+
+  .fab span {
+    /* Hide text on small screens, show icon only */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .fab {
+    padding: .85rem;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page { padding-bottom: 6rem; }
+}

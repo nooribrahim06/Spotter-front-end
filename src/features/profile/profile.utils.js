@@ -1,5 +1,6 @@
 export const PROFILE_QUERY_KEY = ["profile", "me"];
 export const PROFILE_CONFIG_QUERY_KEY = ["profile", "config"];
+export const PROFILE_TARGETS_QUERY_KEY = ["profile", "targets"];
 
 export const SECTION_LABELS = {
   public: "Personal details",

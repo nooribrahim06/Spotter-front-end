@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { refreshAuth } from "../api/apiClient.js";
 import { useAuthStore } from "../stores/authStore.js";
+import { syncUserTimezone } from "../features/profile/timezone.js";
 
 /**
  * useAuthInit — Application startup authentication hook.
@@ -36,6 +37,7 @@ export function useAuthInit() {
         if (!cancelled) {
           setAuth({ user: data.user, accessToken: data.accessToken });
           setInitError(null);
+          syncUserTimezone();
         }
       } catch (error) {
         if (cancelled) return;
@@ -82,6 +84,7 @@ export function useAuthInit() {
       try {
         const data = await refreshAuth();
         setAuth({ user: data.user, accessToken: data.accessToken });
+        syncUserTimezone();
       } catch (error) {
         const code = error.response?.data?.code;
         const status = error.response?.status;

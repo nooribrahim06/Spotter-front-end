@@ -33,6 +33,7 @@ const config = {
 
 let profile;
 let publicPatch;
+let accountPatch;
 
 function makeProfile() {
   return {
@@ -56,6 +57,7 @@ describe("ProfilePage", () => {
     });
     profile = makeProfile();
     publicPatch = null;
+    accountPatch = null;
     server.use(
       http.get("*/api/profiles/config", () => HttpResponse.json({ data: config })),
       http.get("*/api/profiles/me", () => HttpResponse.json({ data: profile })),
@@ -63,6 +65,11 @@ describe("ProfilePage", () => {
         publicPatch = await request.json();
         profile = { ...profile, userProfile: { ...profile.userProfile, ...publicPatch } };
         return HttpResponse.json({ data: profile.userProfile });
+      }),
+      http.patch("*/api/profiles/me/account-preferences", async ({ request }) => {
+        accountPatch = await request.json();
+        profile = { ...profile, account: { ...profile.account, ...accountPatch } };
+        return HttpResponse.json({ data: profile.account });
       })
     );
   });
@@ -124,5 +131,21 @@ describe("ProfilePage", () => {
 
     expect(await screen.findByText("Use at least 2 characters.")).toBeInTheDocument();
     expect(publicPatch).toBeNull();
+  });
+
+  it("opens Region & language layer and updates timezone via dropdown", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ProfilePage />);
+
+    await user.click(await screen.findByRole("button", { name: "Edit language and region" }));
+
+    const timezoneSelect = screen.getByLabelText("Timezone");
+    expect(timezoneSelect).toHaveValue("Africa/Cairo");
+
+    await user.selectOptions(timezoneSelect, "Europe/Paris");
+    await user.click(screen.getByRole("button", { name: "Save changes" }));
+
+    await waitFor(() => expect(accountPatch?.timezone).toBe("Europe/Paris"));
+    expect(useAuthStore.getState().user.timezone).toBe("Europe/Paris");
   });
 });

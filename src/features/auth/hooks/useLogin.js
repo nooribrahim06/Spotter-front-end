@@ -5,6 +5,7 @@ import { useAuthStore } from "../../../stores/authStore.js";
 import { normalizeApiError } from "../../../api/normalizeApiError.js";
 import { showError } from "../../../components/ui/Toast.jsx";
 import { getOnboardingPath } from "../../onboarding/onboarding.domain.js";
+import { syncUserTimezone } from "../../profile/timezone.js";
 
 /**
  * useLogin — Login mutation hook.
@@ -32,6 +33,7 @@ export function useLogin(setError) {
     onSuccess: (response) => {
       const { user, accessToken } = response.data;
       setAuth({ user, accessToken });
+      syncUserTimezone();
       const onboardingPath = getOnboardingPath(user);
       navigate(onboardingPath === "/app/home" ? safeReturnPath : onboardingPath, { replace: true });
     },

@@ -1,0 +1,107 @@
+/* Mirrors the AppLayout confirmDialog pattern exactly */
+
+.backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(23, 37, 38, .58);
+  backdrop-filter: blur(8px);
+}
+
+.dialog {
+  width: min(100%, 420px);
+  padding: 1.4rem;
+  border: 1px solid rgba(255, 255, 255, .5);
+  border-radius: 1.15rem;
+  background: white;
+  box-shadow: 0 30px 80px rgba(23, 37, 38, .28);
+  animation: dialog-in .18s ease-out;
+}
+
+.mark {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  margin-bottom: .9rem;
+  place-items: center;
+  border-radius: .7rem;
+  background: #fef2f2;
+  color: #c44a3f;
+}
+
+.badge {
+  color: #c44a3f;
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.dialog h2 {
+  margin: .25rem 0 .45rem;
+  color: #193b3d;
+  font-size: clamp(1.4rem, 5vw, 1.85rem);
+}
+
+.desc {
+  display: block;
+  color: #4f8485;
+  font-size: .8rem;
+  line-height: 1.55;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .55rem;
+  margin-top: 1.2rem;
+}
+
+.actions button {
+  min-height: 46px;
+  padding: .65rem;
+  border: 1px solid rgba(25, 59, 61, .14);
+  border-radius: .65rem;
+  color: #193b3d;
+  font-size: .72rem;
+  font-weight: 800;
+  cursor: pointer;
+  background: transparent;
+  transition: background-color .14s ease;
+}
+
+.actions button:hover:not(:disabled) {
+  background: #e6f0f3;
+}
+
+.confirmDelete {
+  border-color: #c44a3f !important;
+  background: #c44a3f !important;
+  color: white !important;
+}
+
+.confirmDelete:hover:not(:disabled) {
+  background: #a93b32 !important;
+}
+
+.actions button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(8px) scale(.985); }
+}
+
+@media (max-width: 410px) {
+  .actions { grid-template-columns: 1fr; }
+  .confirmDelete { grid-row: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog { animation: none; }
+}

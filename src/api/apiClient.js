@@ -71,13 +71,13 @@ apiClient.interceptors.request.use((config) => {
 let refreshPromise = null;
 
 /**
- * Attempt a single refresh call. Handles race recovery.
- * @returns {Promise<{user, accessToken}>}
+ * Attempt a refresh call. Handles recovery for clients without Web Locks.
+ * @returns {Promise<import("axios").AxiosResponse>}
  */
 async function doRefresh() {
   try {
-    const { data } = await refreshClient.post("/api/auth/refresh");
-    return data;
+    const response = await refreshClient.post("/api/auth/refresh");
+    return response;
   } catch (error) {
     const code = error.response?.data?.code;
 
@@ -85,8 +85,8 @@ async function doRefresh() {
     if (code === "REFRESH_TOKEN_ALREADY_ROTATED") {
       await new Promise((resolve) => setTimeout(resolve, 250));
       // One recovery attempt through the same coordinator
-      const { data } = await refreshClient.post("/api/auth/refresh");
-      return data;
+      const response = await refreshClient.post("/api/auth/refresh");
+      return response;
     }
 
     throw error;
@@ -97,21 +97,34 @@ async function doRefresh() {
  * Single-flight refresh coordinator.
  * All callers share the same in-flight promise.
  *
- * @returns {Promise<{user, accessToken}>} The refreshed auth data
+ * @returns {Promise<import("axios").AxiosResponse>} The refresh response
  * @throws The original error if refresh fails terminally
  */
-export async function refreshAuth() {
+export async function refreshRequest() {
   if (refreshPromise) {
     return refreshPromise;
   }
 
-  refreshPromise = doRefresh().finally(() => {
+  // The in-memory promise covers one tab. The browser lock also covers other
+  // Spotter tabs sharing this origin and refresh cookie. Hold it until the
+  // response arrives, so the next request sends the newly rotated cookie.
+  const locks = globalThis.navigator?.locks;
+  const apiOrigin = new URL(baseConfig.baseURL || "/", globalThis.location?.origin || "http://localhost").origin;
+  const attempt = locks?.request
+    ? locks.request(`spotter:auth-refresh:${apiOrigin}`, doRefresh)
+    : doRefresh();
+
+  refreshPromise = attempt.finally(() => {
     refreshPromise = null;
   });
 
   return refreshPromise;
 }
 
+/** Return auth data while preserving the Axios response for auth.api callers. */
+export async function refreshAuth() {
+  return (await refreshRequest()).data;
+}
 /* ─────────────────────────────────────────────────────────────
  * RESPONSE INTERCEPTOR — refresh on INVALID_ACCESS_TOKEN
  *
@@ -143,6 +156,27 @@ apiClient.interceptors.response.use(
     // Mark as retried so we don't loop
     originalRequest._retried = true;
 
+    // Check if another request already refreshed the access token while this request was in flight
+    const currentToken = useAuthStore.getState().accessToken;
+    const rawHeader = originalRequest.headers?.Authorization ?? originalRequest.headers?.authorization;
+    const requestHeader = typeof rawHeader === "string"
+      ? rawHeader
+      : typeof originalRequest.headers?.get === "function"
+        ? originalRequest.headers.get("Authorization")
+        : null;
+    const requestToken = typeof requestHeader === "string" ? requestHeader.replace(/^Bearer\s+/i, "") : null;
+
+    if (currentToken && requestToken && currentToken !== requestToken) {
+      // Token was already refreshed by another concurrent request!
+      // Retry immediately with the updated token without triggering another refresh call.
+      if (typeof originalRequest.headers?.set === "function") {
+        originalRequest.headers.set("Authorization", `Bearer ${currentToken}`);
+      } else if (originalRequest.headers) {
+        originalRequest.headers.Authorization = `Bearer ${currentToken}`;
+      }
+      return apiClient(originalRequest);
+    }
+
     try {
       const data = await refreshAuth();
 
@@ -153,7 +187,11 @@ apiClient.interceptors.response.use(
       });
 
       // Retry the original request with the new token
-      originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+      if (typeof originalRequest.headers?.set === "function") {
+        originalRequest.headers.set("Authorization", `Bearer ${data.accessToken}`);
+      } else if (originalRequest.headers) {
+        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+      }
       return apiClient(originalRequest);
     } catch (refreshError) {
       const refreshCode = refreshError.response?.data?.code;
