@@ -1,4 +1,4 @@
-import { apiClient, refreshClient } from "./apiClient.js";
+import { apiClient, refreshRequest } from "./apiClient.js";
 
 /**
  * Spotter — Auth API Functions
@@ -42,11 +42,11 @@ export function verifyEmail({ token }) {
 
 /**
  * POST /api/auth/refresh
- * Uses refreshClient (no auth interceptor) to avoid circular dependency.
+ * Uses the same coordinator as startup and expired access-token recovery.
  * The browser sends the refresh cookie automatically.
  */
 export function refresh() {
-  return refreshClient.post("/api/auth/refresh");
+  return refreshRequest();
 }
 
 /**

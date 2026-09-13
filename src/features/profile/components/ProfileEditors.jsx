@@ -12,6 +12,7 @@ import {
   Toggle,
 } from "./ProfileFormControls.jsx";
 import { getServerFieldError, optionalNumber } from "../profile.utils.js";
+import { detectBrowserTimezone, getTimezoneList } from "../timezone.js";
 import styles from "./ProfileForm.module.css";
 
 function firstError(errors) {
@@ -71,13 +72,16 @@ export function PublicProfileEditor({ profile, onClose, onSave, isSaving, server
 
 export function AccountPreferencesEditor({ profile, onClose, onSave, isSaving, serverError }) {
   const account = profile.account;
+  const detected = detectBrowserTimezone();
   const [values, setValues] = useState({
     language: account.language || "en",
     country: account.country || "",
-    timezone: account.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+    timezone: account.timezone || detected,
   });
   const [errors, setErrors] = useState({});
   const set = (field) => (event) => setValues((current) => ({ ...current, [field]: event.target.value }));
+
+  const timezones = getTimezoneList(values.timezone);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -106,7 +110,14 @@ export function AccountPreferencesEditor({ profile, onClose, onSave, isSaving, s
         <TextInput value={values.country} onChange={set("country")} maxLength="2" autoCapitalize="characters" />
       </Field>
       <Field label="Timezone" hint="Your device timezone is a good default." error={errors.timezone || getServerFieldError(serverError, "timezone")}>
-        <TextInput value={values.timezone} onChange={set("timezone")} placeholder="Africa/Cairo" autoCapitalize="none" />
+        <SelectInput value={values.timezone} onChange={set("timezone")} aria-label="Timezone">
+          <option value="">Select timezone</option>
+          {timezones.map((tz) => (
+            <option key={tz} value={tz}>
+              {tz}
+            </option>
+          ))}
+        </SelectInput>
       </Field>
     </EditorShell>
   );

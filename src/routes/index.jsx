@@ -24,9 +24,17 @@ import OnboardingWelcomePage from "../pages/onboarding/OnboardingWelcomePage.jsx
 import OnboardingPage from "../pages/onboarding/OnboardingPage.jsx";
 import OnboardingSuccessPage from "../pages/onboarding/OnboardingSuccessPage.jsx";
 
+const TrainingHome = lazy(() => import('../features/training/components/TrainingHome.jsx'));
+const WorkoutSession = lazy(() => import('../features/training/components/WorkoutSession.jsx'));
+const TrainingHistory = lazy(() => import('../features/training/components/TrainingHistory.jsx'));
+
 const ProfilePage = lazy(() => import("../pages/app/ProfilePage.jsx"));
 const GoalsPage = lazy(() => import("../pages/app/GoalsPage.jsx"));
 const ExercisesPage = lazy(() => import("../pages/app/ExercisesPage.jsx"));
+const MealsPage = lazy(() => import("../pages/app/MealsPage.jsx"));
+const MealPage = lazy(() => import("../pages/app/MealPage.jsx"));
+const RecipeDetailPage = lazy(() => import("../pages/app/RecipeDetailPage.jsx"));
+const RecipePage = lazy(() => import("../pages/app/RecipePage.jsx"));
 
 /**
  * Global Route Configuration
@@ -120,7 +128,69 @@ export const routes = [
               {
                 path: "home",
                 element: <HomePage />,
-                handle: { immersive: true },
+              },
+              {
+                path: "training",
+                handle: { training: true },
+                element: <Suspense fallback={<p role="status">Getting your training ready…</p>}><TrainingHome /></Suspense>,
+              },
+              {
+                path: "training/history",
+                handle: { training: true },
+                element: <Suspense fallback={<p role="status">Loading your training…</p>}><TrainingHistory /></Suspense>,
+              },
+              {
+                path: "training/workouts/:workoutId",
+                handle: { training: true },
+                element: <Suspense fallback={<p role="status">Picking up your session…</p>}><WorkoutSession /></Suspense>,
+              },
+              {
+                path: "meals",
+                element: (
+                  <Suspense fallback={<p role="status">Loading meals…</p>}>
+                    <MealsPage />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "meals/new",
+                element: (
+                  <Suspense fallback={<p role="status">Loading meal…</p>}>
+                    <MealPage />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "meals/:mealId/edit",
+                element: (
+                  <Suspense fallback={<p role="status">Loading meal…</p>}>
+                    <MealPage />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "recipes/new",
+                element: (
+                  <Suspense fallback={<p role="status">Loading recipe editor…</p>}>
+                    <RecipePage />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "recipes/:recipeId",
+                element: (
+                  <Suspense fallback={<p role="status">Loading recipe…</p>}>
+                    <RecipeDetailPage />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "recipes/:recipeId/edit",
+                element: (
+                  <Suspense fallback={<p role="status">Loading recipe editor…</p>}>
+                    <RecipePage />
+                  </Suspense>
+                ),
               },
               {
                 path: "exercises",

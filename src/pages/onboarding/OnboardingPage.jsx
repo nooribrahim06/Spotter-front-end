@@ -14,6 +14,7 @@ import {
   loadOnboarding,
   saveOnboardingStep,
 } from "../../features/onboarding/api/onboarding.api.js";
+import { syncUserTimezone } from "../../features/profile/timezone.js";
 import {
   ACTIVITY_COPY,
   GOAL_COPY,
@@ -264,6 +265,7 @@ export default function OnboardingPage() {
         lastName: values.lastName,
         sexForCalculation: values.sexForCalculation,
       });
+      syncUserTimezone(queryClient);
       queryClient.setQueryData(["onboarding"], (current) => ({
         ...current,
         status: "completed",

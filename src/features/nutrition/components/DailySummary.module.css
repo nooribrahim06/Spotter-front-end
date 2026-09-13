@@ -1,0 +1,184 @@
+.summary {
+  padding: 1.2rem;
+  border-radius: 1.15rem;
+  background: linear-gradient(135deg, rgba(255,255,255,.97), rgba(240,246,247,.95));
+  border: 1px solid rgba(25, 59, 61, .1);
+  box-shadow: 0 2px 12px rgba(25, 59, 61, .04);
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+/* ── Calorie row ─────────────────────────────────────────── */
+
+.calorieRow {
+  display: flex;
+  align-items: baseline;
+  gap: .55rem;
+}
+
+.calorieMain {
+  display: flex;
+  align-items: baseline;
+  gap: .35rem;
+}
+
+.calorieValue {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #193b3d;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.calorieLabel {
+  font-size: .72rem;
+  font-weight: 700;
+  color: #6b8a8c;
+}
+
+.targetMain {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+}
+
+.target {
+  display: flex;
+  align-items: baseline;
+  gap: .2rem;
+}
+
+.targetValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #8fa7a8;
+  font-variant-numeric: tabular-nums;
+}
+
+.targetLabel {
+  font-size: .62rem;
+  font-weight: 600;
+  color: #a5b8b9;
+}
+
+.historicalNote {
+  font-size: .55rem;
+  font-weight: 500;
+  color: #a5b8b9;
+  font-style: italic;
+}
+
+.missingTargets {
+  padding: .6rem;
+  border-radius: .4rem;
+  background: rgba(25, 59, 61, .04);
+  font-size: .7rem;
+  color: #6b8a8c;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+
+.missingTargets p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.missingTargets a {
+  color: #3b82d9;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.missingTargets a:hover {
+  text-decoration: underline;
+}
+
+/* ── Progress bar ────────────────────────────────────────── */
+
+.progressBar {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(25, 59, 61, .06);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #4f8485, #3b82d9);
+  transition: width .4s ease;
+}
+
+/* ── Macro grid ──────────────────────────────────────────── */
+
+.macroGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5rem;
+}
+
+.macroItem {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .45rem .55rem;
+  border-radius: .5rem;
+  background: rgba(255, 255, 255, .7);
+}
+
+.macroDot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.proteinDot { background: #3b82d9; }
+.carbsDot   { background: #e6953a; }
+.fatDot     { background: #c55a9e; }
+
+.macroLabel {
+  flex: 1;
+  font-size: .66rem;
+  font-weight: 700;
+  color: #6b8a8c;
+}
+
+.macroValue {
+  font-size: .76rem;
+  font-weight: 800;
+  color: #193b3d;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: .15rem;
+}
+
+.macroTarget {
+  font-size: .66rem;
+  font-weight: 600;
+  color: #8fa7a8;
+}
+
+/* ── Incomplete warning ──────────────────────────────────── */
+
+.incomplete {
+  margin: 0;
+  padding: .4rem .6rem;
+  border-radius: .4rem;
+  background: #fef3cd;
+  color: #856404;
+  font-size: .66rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .summary { padding: 1rem; }
+  .calorieValue { font-size: 1.5rem; }
+  .macroGrid { grid-template-columns: 1fr; }
+}

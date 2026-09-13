@@ -40,6 +40,7 @@ import {
   localDate,
   PROFILE_CONFIG_QUERY_KEY,
   PROFILE_QUERY_KEY,
+  PROFILE_TARGETS_QUERY_KEY,
   SECTION_LABELS,
 } from "../../features/profile/profile.utils.js";
 import styles from "./ProfilePage.module.css";
@@ -181,6 +182,15 @@ export default function ProfilePage() {
     try {
       await actionMutation.mutateAsync({ section, payload });
       await queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+      await queryClient.invalidateQueries({ queryKey: PROFILE_TARGETS_QUERY_KEY });
+      if (section === "account" && payload?.timezone) {
+        updateUser({ timezone: payload.timezone });
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["meals"] }),
+          queryClient.invalidateQueries({ queryKey: ["training"] }),
+          queryClient.invalidateQueries({ queryKey: ["goals"] }),
+        ]);
+      }
       showSuccess(successMessage);
       setActiveSection(null);
       return true;

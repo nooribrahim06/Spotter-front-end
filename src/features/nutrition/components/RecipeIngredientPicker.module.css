@@ -1,0 +1,172 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(23, 37, 38, 0.58);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 80vh;
+  background: var(--color-surface-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-text-heading);
+  margin: 0;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  margin: 0.75rem 0;
+  padding: 0 0.75rem;
+  background: var(--color-surface-secondary);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.searchIcon {
+  color: var(--color-text-muted);
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.65rem 0.5rem;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.clearBtn {
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.listArea {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 200px;
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionHeading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin: 0.5rem 0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.foodRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-secondary);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+.foodRow:hover:not(:disabled) {
+  background: var(--color-surface-primary);
+  border-color: var(--color-border);
+}
+
+.foodRow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.foodInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.foodName {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.foodCat {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  padding: 2rem 0;
+}
+
+.skeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

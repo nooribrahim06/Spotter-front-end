@@ -1,0 +1,56 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.chips.sm { font-size: .68rem; }
+.chips.md { font-size: .76rem; }
+
+.calorie {
+  display: inline-flex;
+  align-items: center;
+  gap: .2rem;
+  font-weight: 800;
+  color: #193b3d;
+}
+
+.icon { font-size: .82em; line-height: 1; }
+.unit { font-weight: 600; color: #6b8a8c; }
+
+.sep { color: #c4d5d6; font-weight: 400; }
+
+.macro {
+  display: inline-flex;
+  align-items: center;
+  gap: .15rem;
+  font-weight: 700;
+}
+
+.label {
+  font-weight: 800;
+  font-size: .85em;
+}
+
+.protein .label { color: #3b82d9; }
+.carbs .label   { color: #e6953a; }
+.fat .label     { color: #c55a9e; }
+
+.protein { color: #3f5f6b; }
+.carbs   { color: #3f5f6b; }
+.fat     { color: #3f5f6b; }
+
+.incomplete {
+  display: inline-flex;
+  align-items: center;
+  margin-left: .15rem;
+  padding: .1rem .4rem;
+  border-radius: .3rem;
+  background: #fef3cd;
+  color: #856404;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}

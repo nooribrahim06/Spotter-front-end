@@ -1,0 +1,338 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.required {
+  color: var(--color-error);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+/* ── Meal Type Grid ── */
+.mealTypeGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .mealTypeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.typeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.85rem 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface-secondary);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.typeBtn:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+.typeBtnSelected {
+  border-color: var(--color-interactive-primary);
+  background: var(--color-surface-primary);
+  color: var(--color-interactive-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.typeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.typeLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ── Date Time Input ── */
+.dateTimeInput {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-primary);
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 600;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.dateTimeInput:focus {
+  border-color: var(--color-interactive-primary);
+}
+
+/* ── Running Summary ── */
+.summaryBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.summaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.summaryItemCount {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+/* ── Items List ── */
+.itemsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addItemBtn {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--color-interactive-primary);
+  color: var(--color-interactive-primary-text);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.addItemBtn:hover {
+  background: var(--color-interactive-primary-hover);
+}
+
+.emptyItems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1.5px dashed var(--color-border);
+  background: var(--color-surface-secondary);
+  cursor: pointer;
+  text-align: center;
+  transition: var(--transition-fast);
+}
+
+.emptyItems:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.emptyIcon {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.emptyText {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.emptyHint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.itemsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.itemBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: white;
+}
+
+.itemBadge[data-type="FOOD"] {
+  background: #3b82d9;
+}
+
+.itemBadge[data-type="RECIPE"] {
+  background: #e6953a;
+}
+
+.itemBadge[data-type="QUICK"] {
+  background: #9333ea;
+}
+
+.itemDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.itemName {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemMeta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.deleteItemBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.deleteItemBtn:hover {
+  background: #fee2e2;
+  color: var(--color-error);
+}
+
+/* ── Notes ── */
+.notesInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-primary);
+  color: var(--color-text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.notesInput:focus {
+  border-color: var(--color-interactive-primary);
+}
+
+/* ── Actions ── */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: var(--color-surface-secondary);
+}
+
+.saveBtn {
+  flex: 2;
+  padding: 0.85rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--color-interactive-primary);
+  color: var(--color-interactive-primary-text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: var(--color-interactive-primary-hover);
+}
+
+.saveBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  font-size: 0.75rem;
+  color: var(--color-error);
+}
