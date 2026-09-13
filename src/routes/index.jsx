@@ -30,6 +30,7 @@ const TrainingHistory = lazy(() => import('../features/training/components/Train
 
 const ProfilePage = lazy(() => import("../pages/app/ProfilePage.jsx"));
 const GoalsPage = lazy(() => import("../pages/app/GoalsPage.jsx"));
+const ExercisesPage = lazy(() => import("../pages/app/ExercisesPage.jsx"));
 const MealsPage = lazy(() => import("../pages/app/MealsPage.jsx"));
 const MealPage = lazy(() => import("../pages/app/MealPage.jsx"));
 const RecipeDetailPage = lazy(() => import("../pages/app/RecipeDetailPage.jsx"));
@@ -188,6 +189,14 @@ export const routes = [
                 element: (
                   <Suspense fallback={<p role="status">Loading recipe editor…</p>}>
                     <RecipePage />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "exercises",
+                element: (
+                  <Suspense fallback={<p role="status">Loading exercises…</p>}>
+                    <ExercisesPage />
                   </Suspense>
                 ),
               },

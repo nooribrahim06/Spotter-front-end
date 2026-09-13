@@ -33,5 +33,9 @@
     "msw": "^2.9.2",
     "vite": "^6.3.5",
     "vitest": "^3.2.3"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "msw@2.15.0": true
   }
 }
