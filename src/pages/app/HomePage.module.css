@@ -217,3 +217,12 @@
 @media (max-width: 480px) {
   .page { padding-bottom: 6rem; }
 }
+.greeting { color: var(--nav-teal); font-size: .85rem; font-weight: 700; margin-bottom: .4rem; }
+.calendar { background: transparent; border: 1px solid var(--color-border); border-radius: .75rem; color: var(--nav-ink); padding: .65rem; min-height: 44px; font: inherit; font-size: .85rem; min-width: 0; }
+.calendar:focus-visible { outline: 3px solid var(--nav-teal); outline-offset: 3px; }
+.quickActions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; padding: 1rem 0; }
+.quickActions a { display: inline-flex; min-height: 44px; align-items: center; padding: .65rem 1rem; border-radius: .8rem; font-size: .85rem; font-weight: 750; background: var(--nav-mist); color: var(--nav-ink); }
+@media (max-width: 620px) { .header { align-items: flex-start; flex-direction: column; } .dateControls { width: 100%; flex-wrap: wrap; } .calendar { flex: 1; } }
+
+.greeting { color: var(--nav-ink); }
+.quickActions a { text-decoration: none; }

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore.js';
+import { invalidateActivityDays, cachedActivityTime } from '../daily-summary/invalidation.js';
 import { trainingApi as api } from './training.api.js';
 
 // User-scoped, memory-only queries. No workout data survives the authenticated view.
@@ -60,7 +61,8 @@ export function useTrainingAction() {
   return useMutation({
     retry: false,
     mutationFn: ({ type, id, rowId, data }) => api[type](...(type === 'start' ? [data] : ['update', 'remove'].includes(type) ? [id, rowId, data] : [id, data])),
-    onSuccess: async (result, variables) => {
+    onMutate: ({ id }) => ({ oldTime: id ? cachedActivityTime(client, 'training', id, 'startedAt') : null }),
+    onSuccess: async (result, variables, context) => {
       // A mutation from a previous login must never refill the new user's cache.
       if (useAuthStore.getState().user?.id !== keys.root[1]) return;
       await client.cancelQueries({ queryKey: keys.root });
@@ -72,6 +74,7 @@ export function useTrainingAction() {
         client.setQueryData(keys.active, update);
       }
       await Promise.all([
+        invalidateActivityDays(client, ...(type === 'start' ? [result?.startedAt] : [context?.oldTime, result?.startedAt || context?.oldTime])),
         client.invalidateQueries({ queryKey: keys.active }),
         ...(id ? [client.invalidateQueries({ queryKey: keys.detail(id) })] : []),
         ...(['start', 'complete', 'cancel'].includes(type) ? [client.invalidateQueries({ queryKey: keys.history })] : []),

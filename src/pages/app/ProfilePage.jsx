@@ -8,7 +8,6 @@ import { showSuccess } from "../../components/ui/Toast.jsx";
 import { normalizeApiError } from "../../api/normalizeApiError.js";
 import { useAuthStore } from "../../stores/authStore.js";
 import {
-  addProgressEntry,
   createBodyProfile,
   deleteBodyProfile,
   getMyProfile,
@@ -25,7 +24,6 @@ import {
   AccountPreferencesEditor,
   BodyProfileEditor,
   CoachingEditor,
-  ProgressEditor,
   PublicProfileEditor,
 } from "../../features/profile/components/ProfileEditors.jsx";
 import {
@@ -43,12 +41,13 @@ import {
   PROFILE_TARGETS_QUERY_KEY,
   SECTION_LABELS,
 } from "../../features/profile/profile.utils.js";
+import CheckInDialog from "../../features/progress/components/CheckInDialog.jsx";
+import { invalidateJourney } from "../../features/daily-summary/invalidation.js";
 import styles from "./ProfilePage.module.css";
 
 const ACTIONS = {
   public: updatePublicProfile,
   account: updateAccountPreferences,
-  progress: addProgressEntry,
   health: replaceHealthProfile,
   nutrition: replaceNutritionProfile,
   training: replaceTrainingProfile,
@@ -157,7 +156,7 @@ export default function ProfilePage() {
     });
   }, [profileQuery.data?.account, updateUser]);
   useEffect(() => {
-    if (!activeSection) return undefined;
+    if (!activeSection || activeSection === "progress") return undefined;
     const previousOverflow = document.body.style.overflow;
     const focusFrame = window.requestAnimationFrame(() => editorRef.current?.focus());
     const closeOnEscape = (event) => {
@@ -182,7 +181,7 @@ export default function ProfilePage() {
     try {
       await actionMutation.mutateAsync({ section, payload });
       await queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
-      await queryClient.invalidateQueries({ queryKey: PROFILE_TARGETS_QUERY_KEY });
+      await invalidateJourney(queryClient);
       if (section === "account" && payload?.timezone) {
         updateUser({ timezone: payload.timezone });
         await Promise.all([
@@ -225,7 +224,6 @@ export default function ProfilePage() {
     public: <PublicProfileEditor {...sharedEditorProps} />,
     account: <AccountPreferencesEditor {...sharedEditorProps} />,
     body: <BodyProfileEditor {...sharedEditorProps} onDelete={removeBody} />,
-    progress: <ProgressEditor {...sharedEditorProps} />,
     health: <HealthEditor {...sharedEditorProps} />,
     nutrition: <NutritionEditor {...sharedEditorProps} />,
     training: <TrainingEditor {...sharedEditorProps} />,
@@ -287,7 +285,8 @@ export default function ProfilePage() {
           </div>
         </section>
       </div>
-      {activeSection && (
+      {activeSection === "progress" && <CheckInDialog onClose={() => setActiveSection(null)} />}
+      {activeSection && activeSection !== "progress" && (
         <div className={styles.editorBackdrop} role="presentation" onMouseDown={(event) => {
           if (event.target === event.currentTarget) closeEditor();
         }}>

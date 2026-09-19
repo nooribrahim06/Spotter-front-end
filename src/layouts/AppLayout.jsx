@@ -9,6 +9,7 @@ function NavIcon({ name }) {
     today: <><path d="M4 11.5 12 5l8 6.5" /><path d="M6.5 10.5V20h11v-9.5M10 20v-5h4v5" /></>,
     meals: <><path d="M3 11h18" /><path d="M5 7l1 4" /><path d="M19 7l-1 4" /><path d="M12 4v3" /><path d="M5 11c0 5 3 8 7 8s7-3 7-8" /></>,
     training: <><path d="m7 7 10 10M3 7l4-4m10 18 4-4M4 10l6-6m4 16 6-6" /></>,
+    progress: <><path d="M4 5v15h16M7 15l4-4 4 2 5-7" /></>,
     goals: <><circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="4.5" /><path d="m15.5 8.5 4-4m-1 0h1v1" /></>,
   };
   return <svg viewBox="0 0 24 24" aria-hidden="true">{paths[name]}</svg>;
@@ -42,6 +43,7 @@ export default function AppLayout() {
             <NavLink to="/app/home" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`.trim()}>Today</NavLink>
             <NavLink to="/app/meals" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`.trim()}>Meals</NavLink>
             <NavLink to="/app/training" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`.trim()}>Training</NavLink>
+            <NavLink to="/app/progress" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`.trim()}>Progress</NavLink>
             <NavLink to="/app/goals" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`.trim()}>Goals</NavLink>
           </nav>
           <div className={styles.userArea}><AccountMenu /></div>
@@ -56,6 +58,7 @@ export default function AppLayout() {
           <NavIcon name="meals" /><span>Meals</span>
         </NavLink>
         <NavLink to="/app/training" className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ""}`.trim()}><NavIcon name="training" /><span>Training</span></NavLink>
+        <NavLink to="/app/progress" className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ""}`.trim()}><NavIcon name="progress" /><span>Progress</span></NavLink>
         <NavLink to="/app/goals" className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ""}`.trim()}>
           <NavIcon name="goals" /><span>Goals</span>
         </NavLink>

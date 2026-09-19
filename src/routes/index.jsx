@@ -29,6 +29,7 @@ const WorkoutSession = lazy(() => import('../features/training/components/Workou
 const TrainingHistory = lazy(() => import('../features/training/components/TrainingHistory.jsx'));
 
 const ProfilePage = lazy(() => import("../pages/app/ProfilePage.jsx"));
+const ProgressPage = lazy(() => import('../features/progress/components/ProgressPage.jsx'));
 const GoalsPage = lazy(() => import("../pages/app/GoalsPage.jsx"));
 const MealsPage = lazy(() => import("../pages/app/MealsPage.jsx"));
 const MealPage = lazy(() => import("../pages/app/MealPage.jsx"));
@@ -190,6 +191,10 @@ export const routes = [
                     <RecipePage />
                   </Suspense>
                 ),
+              },
+              {
+                path: "progress",
+                element: <Suspense fallback={<p role="status">Loading your journey…</p>}><ProgressPage /></Suspense>,
               },
               {
                 path: "goals",

@@ -110,11 +110,8 @@ export function getTimezoneList(selectedTimezone) {
     }
   }
 
-  if (selectedTimezone && !list.includes(selectedTimezone)) {
-    return [selectedTimezone, ...list].sort();
-  }
-
-  return list;
+  // Intl omits UTC in some browsers even though it is a valid saved timezone.
+  return [...new Set(["UTC", ...list, ...(selectedTimezone ? [selectedTimezone] : [])])].sort();
 }
 
 let syncPromise = null;

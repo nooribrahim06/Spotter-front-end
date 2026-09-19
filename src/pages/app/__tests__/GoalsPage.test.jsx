@@ -94,7 +94,7 @@ describe("GoalsPage", () => {
     renderWithProviders(<GoalsPage />, { initialEntries: ["/app/goals"] });
 
     expect(await screen.findByRole("heading", { name: /no check-in yet/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /record progress/i })).toHaveAttribute("href", "/app/profile");
+    expect(screen.getByRole("link", { name: /record progress/i })).toHaveAttribute("href", "/app/progress?checkIn=1");
     expect(screen.queryByRole("button", { name: /edit improve fitness/i })).not.toBeInTheDocument();
   });
 });

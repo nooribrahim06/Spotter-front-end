@@ -190,7 +190,7 @@
     bottom: 0;
     left: 0;
     display: grid;
-    grid-template-columns: repeat(4, minmax(60px, 120px));
+    grid-template-columns: repeat(5, minmax(0, 120px));
     justify-content: center;
     min-height: calc(62px + env(safe-area-inset-bottom));
     padding: .3rem .7rem calc(.3rem + env(safe-area-inset-bottom));

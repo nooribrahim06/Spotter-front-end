@@ -1,0 +1,57 @@
+.overview, .loading { display: grid; gap: 1.75rem; }
+.hero { display: grid; position: relative; overflow: hidden; grid-template-columns: 1fr 250px; background: var(--journey-ink); color: var(--palette-white); border-radius: 2rem; padding: clamp(1.5rem, 4vw, 3rem); }
+.heroCopy { z-index: 1; }
+.eyebrow { font-size: .7rem; text-transform: uppercase; letter-spacing: .13em; font-weight: 800; }
+.hero .eyebrow { color: var(--journey-mist); }
+.calorieNumber { font-size: clamp(5rem, 12vw, 9rem); font-weight: 850; line-height: 1.1; letter-spacing: -.08em; font-variant-numeric: tabular-nums; margin-top: .8rem; }
+.hero h2 { color: var(--journey-mist); font-size: 1.2rem; font-weight: 500; letter-spacing: -.02em; }
+.heroNote { color: var(--journey-mist); font-size: .85rem; margin-top: 1.3rem; max-width: 45ch; }
+.bit { align-self: end; width: 230px; height: 285px; position: relative; }
+.bit::before { content: ''; position: absolute; width: 240px; height: 240px; border-radius: 50%; bottom: 0; left: 0; background: color-mix(in srgb, var(--journey-teal) 35%, transparent); }
+.bit > div { width: 100%; height: 100%; }
+.calorieFacts { display: grid; grid-template-columns: repeat(3, 1fr); grid-column: 1 / -1; border-top: 1px solid color-mix(in srgb, var(--journey-mist) 25%, transparent); margin-top: 1.75rem; padding-top: 1.25rem; gap: 1rem; }
+.calorieFacts dt { color: var(--journey-mist); font-size: .8rem; }
+.calorieFacts dd { font-size: clamp(1.4rem, 3.5vw, 2.25rem); font-weight: 750; letter-spacing: -.04em; }
+.calorieFacts small { font-size: .75rem; font-weight: 400; letter-spacing: 0; }
+.context { border-left: 3px solid var(--journey-teal); padding: .25rem 1rem; font-size: .9rem; }
+.context a { display: inline-flex; align-items: center; min-height: 44px; margin-right: 1.5rem; text-decoration: underline; text-underline-offset: 4px; }
+.macros { padding: 1.5rem 0; }
+.macroHeading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 1.8rem; }
+.macroHeading .eyebrow { margin-bottom: .5rem; }
+.macroHeading > span { font-size: .8rem; color: var(--color-text-secondary); }
+.macroRows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+.macro h3 { font-size: .85rem; margin-bottom: .5rem; }
+.macro strong { font-size: 2rem; font-weight: 800; letter-spacing: -.05em; }
+.macro p > span { font-size: .85rem; color: var(--color-text-secondary); }
+.macro progress { width: 100%; height: 7px; appearance: none; border: none; border-radius: 99px; overflow: hidden; background: var(--journey-mist); margin-top: .8rem; }
+.macro progress::-webkit-progress-bar { background: var(--journey-mist); }
+.macro progress::-webkit-progress-value { background: var(--journey-teal); border-radius: 99px; transition: width .3s ease; }
+.macro:nth-child(2) progress::-webkit-progress-value { background: var(--journey-ink); }
+.macro:nth-child(3) progress::-webkit-progress-value { background: var(--journey-coral); }
+.macro progress::-moz-progress-bar { background: var(--journey-teal); }
+.unavailable { display: block; font-size: .75rem; color: var(--color-text-secondary); margin-top: .5rem; }
+.macroNote { padding: 1rem; margin-top: 1.5rem; border-radius: 1rem; background: var(--journey-mist); font-size: .85rem; }
+.activity { display: grid; grid-template-columns: 1fr 1fr; border-block: 1px solid var(--color-border); }
+.activity > a { display: flex; align-items: center; gap: 1.25rem; padding: 1.5rem 1rem; color: var(--journey-ink); transition: background .2s; }
+.activity > a:hover { background: var(--journey-mist); }
+.activity > a + a { border-left: 1px solid var(--color-border); }
+.activity p { font-size: .8rem; }
+.activity h3 { font-size: 1.35rem; margin: .15rem 0 .4rem; }
+.activity div > span { font-size: .8rem; font-weight: 750; }
+.activityIcon { width: 48px; height: 48px; flex-shrink: 0; background: var(--journey-mist); border-radius: 1rem; display: grid; place-items: center; }
+.activityIcon svg { width: 27px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.targetContext { font-size: .8rem; color: var(--color-text-secondary); }
+.targetContext summary { cursor: pointer; min-height: 44px; padding: .65rem 0; }
+.targetContext p { margin: .5rem 0; max-width: 85ch; }
+.journeyLink { display: flex; gap: 1.5rem; align-items: center; justify-content: space-between; padding: 1.8rem; background: var(--journey-mist); color: var(--journey-ink); border-radius: 1.3rem; }
+.journeyLink .eyebrow { margin-bottom: .5rem; }
+.journeyLink h2 { font-size: 1.6rem; }
+.journeyLink p:not(.eyebrow) { font-size: .85rem; margin-top: .5rem; }
+.journeyLink > span { font-size: .85rem; font-weight: 800; white-space: nowrap; }
+@media (max-width: 760px) { .hero { grid-template-columns: 1fr 170px; } .bit { width: 170px; height: 230px; } .bit::before { width: 180px; height: 180px; } .macroRows { gap: 1rem; } .journeyLink { flex-direction: column; align-items: flex-start; } .activity > a { padding: 1rem .5rem; gap: .6rem; } .activity h3 { font-size: 1.1rem; } .macroHeading { align-items: start; flex-direction: column; gap: .5rem; } }
+@media (max-width: 480px) { .hero { grid-template-columns: minmax(0, 1fr) 80px; border-radius: 1.4rem; padding: 1.4rem; } .bit { width: 125px; height: 180px; align-self: start; justify-self: end; margin-right: -1.2rem; opacity: .85; margin-top: 1.2rem; } .bit::before { width: 120px; height: 120px; } .calorieNumber { font-size: 5rem; } .hero h2 { font-size: 1rem; } .heroNote { width: calc(100% + 80px); margin-top: 2rem; } .calorieFacts { gap: .4rem; } .calorieFacts small { display: block; } .macro strong { font-size: 1.65rem; } .macro p > span { display: block; font-size: .75rem; } .activityIcon { display: none; } .activity > a + a { padding-left: 1rem; } }
+@media (prefers-reduced-motion: reduce) { .overview * { transition: none !important; } }
+
+.activity > a, .journeyLink { text-decoration: none; }
+.activity div > span, .journeyLink > span { text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 480px) { .bit { width: 110px; margin-right: 0; } }

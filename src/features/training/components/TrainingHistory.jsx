@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTrainingHistory } from '../useTraining.js';
 import { dateRange, fieldErrors } from '../training.domain.js';
 import { Bit, Button, Field, ErrorNotice, Loading, Pagination, Icon } from './TrainingUI.jsx';
 import HistoryList from './HistoryList.jsx';
+import { validCalendarDate } from '../../daily-summary/daily-summary.domain.js';
 import s from '../Training.module.css';
 
 export default function TrainingHistory() {
-  const [from, setFrom] = useState(''), [to, setTo] = useState(''), [page, setPage] = useState(1);
+  const [params] = useSearchParams();
+  const day = validCalendarDate(params.get('date')) ? params.get('date') : '';
+  const [from, setFrom] = useState(day), [to, setTo] = useState(day), [page, setPage] = useState(1);
   const range = dateRange(from, to);
   const query = useTrainingHistory({ ...range.params, page, limit: 10 }, !range.error);
   const errors = fieldErrors(query.error, ['from', 'to']);

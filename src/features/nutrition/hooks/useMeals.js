@@ -8,6 +8,7 @@ import {
   MEALS_KEY,
   mealDetailKey,
 } from "../api/meals.api.js";
+import { invalidateActivityDays, cachedActivityTime } from "../../daily-summary/invalidation.js";
 import { FOODS_OVERVIEW_KEY } from "../api/foods.api.js";
 import { RECIPES_OVERVIEW_KEY } from "../api/recipes.api.js";
 
@@ -69,7 +70,8 @@ export function useCreateMeal() {
 
   return useMutation({
     mutationFn: (payload) => createMeal(payload),
-    onSuccess: () => {
+    onSuccess: (data, payload) => {
+      invalidateActivityDays(queryClient, data?.occurredAt || payload?.occurredAt);
       queryClient.invalidateQueries({ queryKey: MEALS_KEY });
       queryClient.invalidateQueries({ queryKey: FOODS_OVERVIEW_KEY });
       queryClient.invalidateQueries({ queryKey: RECIPES_OVERVIEW_KEY });
@@ -86,7 +88,9 @@ export function useUpdateMeal() {
 
   return useMutation({
     mutationFn: ({ mealId, payload }) => updateMeal(mealId, payload),
-    onSuccess: (_data, variables) => {
+    onMutate: ({ mealId }) => ({ oldTime: cachedActivityTime(queryClient, "meals", mealId, "occurredAt") }),
+    onSuccess: (data, variables, context) => {
+      invalidateActivityDays(queryClient, context?.oldTime, data?.occurredAt || variables.payload?.occurredAt);
       queryClient.invalidateQueries({ queryKey: MEALS_KEY });
       queryClient.invalidateQueries({
         queryKey: mealDetailKey(variables.mealId),
@@ -106,7 +110,9 @@ export function useDeleteMeal() {
 
   return useMutation({
     mutationFn: (mealId) => deleteMeal(mealId),
-    onSuccess: () => {
+    onMutate: mealId => ({ oldTime: cachedActivityTime(queryClient, "meals", mealId, "occurredAt") }),
+    onSuccess: (_data, _variables, context) => {
+      invalidateActivityDays(queryClient, context?.oldTime);
       queryClient.invalidateQueries({ queryKey: MEALS_KEY });
     },
   });

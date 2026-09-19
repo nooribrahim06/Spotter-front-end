@@ -44,10 +44,6 @@ export async function replaceCoachingPreferences(payload) {
   return unwrapData(await apiClient.put("/api/profiles/me/coaching", payload));
 }
 
-export async function addProgressEntry(payload) {
-  return unwrapData(await apiClient.post("/api/profiles/me/progress", payload));
-}
-
 export async function getMyTargets() {
   return unwrapData(await apiClient.get("/api/profiles/me/targets"));
 }

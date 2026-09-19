@@ -28,6 +28,7 @@ import {
 import GoalForm from "../../features/goals/components/GoalForm.jsx";
 import GoalIcon from "../../features/goals/components/GoalIcon.jsx";
 import GoalModal from "../../features/goals/components/GoalModal.jsx";
+import { invalidateJourney } from "../../features/daily-summary/invalidation.js";
 import styles from "./GoalsPage.module.css";
 
 function GoalsSkeleton() {
@@ -134,7 +135,7 @@ function ProgressSnapshot({ activeGoal }) {
           <p className={styles.eyebrow}>Your first checkpoint</p>
           <h2 id="progress-heading">No check-in yet.</h2>
           <p>Give Spotter your first checkpoint and we’ll start connecting the dots.</p>
-          <Link to="/app/profile">Record progress <GoalIcon name="arrow" /></Link>
+          <Link to="/app/progress?checkIn=1">Record progress <GoalIcon name="arrow" /></Link>
         </div>
         <div className={styles.unfinishedPath} aria-hidden="true"><i/><i/><i/><i/></div>
       </section>
@@ -303,7 +304,7 @@ export default function GoalsPage() {
   useEffect(() => { document.title = "Goals — Spotter"; }, []);
 
   async function refreshGoals() {
-    await queryClient.invalidateQueries({ queryKey: GOALS_QUERY_KEY });
+    await invalidateJourney(queryClient);
   }
 
   function lifecycleError(error, goal) {

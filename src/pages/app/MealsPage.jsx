@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { todayDateString, formatDateLabel, isToday, MEAL_TYPES, mealTypeMeta } from "../../features/nutrition/nutrition.domain.js";
 import { useMealsByDate } from "../../features/nutrition/hooks/useMeals.js";
 import DailySummary from "../../features/nutrition/components/DailySummary.jsx";
@@ -8,6 +8,8 @@ import DeleteMealDialog from "../../features/nutrition/components/DeleteMealDial
 import Skeleton from "../../components/ui/Skeleton.jsx";
 import EmptyState from "../../components/ui/EmptyState.jsx";
 import PageError from "../../components/ui/PageError.jsx";
+import { validCalendarDate, calendarDate } from "../../features/daily-summary/daily-summary.domain.js";
+import { useAuthStore } from "../../stores/authStore.js";
 import styles from "./MealsPage.module.css";
 
 function MealsSkeleton() {
@@ -28,7 +30,9 @@ function MealsSkeleton() {
  * Shows the same meal list + summary as home, for any selected date.
  */
 export default function MealsPage() {
-  const [selectedDate, setSelectedDate] = useState(todayDateString());
+  const [params] = useSearchParams();
+  const timezone = useAuthStore(s => s.user?.timezone);
+  const [selectedDate, setSelectedDate] = useState(() => validCalendarDate(params.get("date")) ? params.get("date") : calendarDate(new Date(), timezone));
   const { data, isLoading, isError, refetch } = useMealsByDate(selectedDate);
   const [deletingMeal, setDeletingMeal] = useState(null);
 
