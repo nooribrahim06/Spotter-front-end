@@ -226,3 +226,81 @@
 
 .greeting { color: var(--nav-ink); }
 .quickActions a { text-decoration: none; }
+
+/* ── Today's Plan Section ────────────────────────────────── */
+
+.planSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 1.4rem;
+  border-radius: 1.25rem;
+  background: white;
+  border: 1px solid rgba(79, 132, 133, 0.22);
+  box-shadow: 0 4px 20px rgba(25, 59, 61, 0.06);
+}
+
+.planSectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgba(25, 59, 61, 0.08);
+}
+
+.planBadge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.35rem;
+  background: rgba(79, 132, 133, 0.12);
+  color: var(--nav-teal, #4f8485);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.planHeading {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 850;
+  color: #193b3d;
+  letter-spacing: -0.01em;
+}
+
+.planSubtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #6b8a8c;
+  line-height: 1.4;
+}
+
+.viewPlanLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: var(--nav-teal, #4f8485);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.6rem;
+  background: rgba(79, 132, 133, 0.08);
+  transition: all 0.16s ease;
+  flex-shrink: 0;
+}
+
+.viewPlanLink:hover {
+  background: rgba(79, 132, 133, 0.16);
+  color: #193b3d;
+}
+
+@media (max-width: 620px) {
+  .planSectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

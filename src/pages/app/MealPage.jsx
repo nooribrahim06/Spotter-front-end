@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useMealDetail } from "../../features/nutrition/hooks/useMeals.js";
 import { useMealDraftStore } from "../../stores/mealDraftStore.js";
 import MealDraftPanel from "../../features/nutrition/components/MealDraftPanel.jsx";
@@ -9,22 +9,28 @@ import styles from "./MealPage.module.css";
 
 /**
  * Full page for logging a new meal or editing an existing meal.
+ * Handles pre-filling from plan context when navigated from a planned meal option.
  */
 export default function MealPage() {
   const { mealId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const isEdit = Boolean(mealId);
+  const fromPlanState = location.state?.fromPlan ? location.state : null;
+  const initializedFromPlanRef = useRef(false);
 
   const {
     editingMealId,
     mealType,
     initDraft,
     initFromMeal,
+    setNotes,
+    addQuickItem,
     clearDraft,
   } = useMealDraftStore();
 
-  const { data: meal, isLoading, isError, error, refetch } = useMealDetail(mealId);
+  const { data: meal, isLoading, isError, refetch } = useMealDetail(mealId);
 
   // Set document title
   useEffect(() => {
@@ -38,9 +44,72 @@ export default function MealPage() {
     }
   }, [isEdit, meal, editingMealId, initFromMeal]);
 
-  // If new meal and no mealType is set, initialize with reasonable default based on current hour
+  // Pre-fill from plan state if navigated from a plan day
   useEffect(() => {
-    if (!isEdit && !mealType) {
+    if (!isEdit && fromPlanState && !initializedFromPlanRef.current) {
+      initializedFromPlanRef.current = true;
+      const { prefill, scheduledDate } = fromPlanState;
+
+      // Determine mealType from slot or label
+      let selectedType = "LUNCH";
+      const slot = (prefill?.slot || "").toUpperCase();
+      const label = (prefill?.label || prefill?.name || "").toLowerCase();
+      if (slot === "MORNING" || label.includes("breakfast")) {
+        selectedType = "BREAKFAST";
+      } else if (slot === "AFTERNOON" || label.includes("lunch")) {
+        selectedType = "LUNCH";
+      } else if (slot === "EVENING" || label.includes("dinner")) {
+        selectedType = "DINNER";
+      } else if (slot === "SNACK" || label.includes("snack")) {
+        selectedType = "SNACK";
+      } else {
+        const hour = new Date().getHours();
+        if (hour < 11) selectedType = "BREAKFAST";
+        else if (hour < 16) selectedType = "LUNCH";
+        else if (hour < 21) selectedType = "DINNER";
+        else selectedType = "SNACK";
+      }
+
+      // Determine timestamp
+      const now = new Date();
+      let occurredAt = now.toISOString();
+      if (scheduledDate) {
+        const timePart = now.toTimeString().split(" ")[0]; // HH:mm:ss
+        const combined = new Date(`${scheduledDate}T${timePart}`);
+        if (!isNaN(combined.getTime())) {
+          occurredAt = combined.toISOString();
+        }
+      }
+
+      initDraft(selectedType, occurredAt);
+
+      // Populate notes if available
+      if (prefill?.note) {
+        setNotes(prefill.note);
+      } else if (prefill?.items?.length) {
+        const itemDescriptions = prefill.items
+          .map((i) => `${i.quantity ? `${i.quantity} ` : ""}${i.name || i.description || ""}`.trim())
+          .filter(Boolean)
+          .join(", ");
+        if (itemDescriptions) setNotes(itemDescriptions);
+      }
+
+      // Pre-fill quick item if calories are specified
+      if (prefill?.calories != null) {
+        addQuickItem({
+          itemName: prefill.label || prefill.name || "Planned meal",
+          calories: Number(prefill.calories),
+          proteinGrams: prefill.proteinGrams != null ? Number(prefill.proteinGrams) : null,
+          carbohydrateGrams: prefill.carbsGrams != null ? Number(prefill.carbsGrams) : null,
+          fatGrams: prefill.fatGrams != null ? Number(prefill.fatGrams) : null,
+        });
+      }
+    }
+  }, [isEdit, fromPlanState, initDraft, setNotes, addQuickItem]);
+
+  // If new meal and no mealType is set (and not from plan), initialize with reasonable default based on current hour
+  useEffect(() => {
+    if (!isEdit && !fromPlanState && !mealType) {
       const hour = new Date().getHours();
       let defaultType = "LUNCH";
       if (hour < 11) defaultType = "BREAKFAST";
@@ -50,7 +119,7 @@ export default function MealPage() {
 
       initDraft(defaultType);
     }
-  }, [isEdit, mealType, initDraft]);
+  }, [isEdit, fromPlanState, mealType, initDraft]);
 
   const handleCancel = () => {
     clearDraft();
@@ -108,6 +177,8 @@ export default function MealPage() {
           <p className={styles.subtitle}>
             {isEdit
               ? "Updating will replace all items with fresh nutrition snapshots."
+              : fromPlanState
+              ? `Logging from your plan: ${fromPlanState.prefill?.label || "Planned meal"}. Review items and save.`
               : "Track your food, recipes, and macros for today."}
           </p>
         </div>

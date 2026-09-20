@@ -1,4 +1,5 @@
 import { DAILY_SUMMARY_KEY, dailySummaryKey } from './daily-summary.api.js';
+export { DAILY_SUMMARY_KEY, dailySummaryKey };
 import { calendarDate } from './daily-summary.domain.js';
 import { useAuthStore } from '../../stores/authStore.js';
 // Include both old and new dates when an activity moves. If a deleted activity

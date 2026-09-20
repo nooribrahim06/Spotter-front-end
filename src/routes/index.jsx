@@ -36,6 +36,10 @@ const MealPage = lazy(() => import("../pages/app/MealPage.jsx"));
 const RecipeDetailPage = lazy(() => import("../pages/app/RecipeDetailPage.jsx"));
 const RecipePage = lazy(() => import("../pages/app/RecipePage.jsx"));
 
+const PlansPage = lazy(() => import("../pages/app/PlansPage.jsx"));
+const PlanGeneration = lazy(() => import("../features/plans/components/PlanGeneration.jsx"));
+const PlanDetail = lazy(() => import("../features/plans/components/PlanDetail.jsx"));
+
 /**
  * Global Route Configuration
  *
@@ -195,6 +199,30 @@ export const routes = [
               {
                 path: "progress",
                 element: <Suspense fallback={<p role="status">Loading your journey…</p>}><ProgressPage /></Suspense>,
+              },
+              {
+                path: "plans",
+                element: (
+                  <Suspense fallback={<p role="status">Loading plans…</p>}>
+                    <PlansPage />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "plans/new",
+                element: (
+                  <Suspense fallback={<p role="status">Loading plan generator…</p>}>
+                    <PlanGeneration />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "plans/:planId",
+                element: (
+                  <Suspense fallback={<p role="status">Loading plan…</p>}>
+                    <PlanDetail />
+                  </Suspense>
+                ),
               },
               {
                 path: "goals",
