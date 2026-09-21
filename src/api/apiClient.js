@@ -40,6 +40,7 @@ const AUTH_ENDPOINTS = [
   "/api/auth/resend-verification",
   "/api/auth/refresh",
   "/api/auth/logout",
+  "/api/auth/logout-all",
 ];
 
 function isAuthEndpoint(url) {

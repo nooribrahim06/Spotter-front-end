@@ -56,3 +56,8 @@ export function refresh() {
 export function logout() {
   return apiClient.post("/api/auth/logout");
 }
+
+/** POST /api/auth/logout-all — sends the HttpOnly cookie through apiClient. */
+export function logoutAll() {
+  return apiClient.post("/api/auth/logout-all");
+}
