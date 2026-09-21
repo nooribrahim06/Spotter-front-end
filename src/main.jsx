@@ -5,6 +5,9 @@ import { queryClient } from "./queryClient.js";
 
 import "./styles/global.css";
 import App from "./App.jsx";
+import { installChunkRecovery } from "./routes/chunkRecovery.js";
+
+installChunkRecovery();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

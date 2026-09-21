@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import RouteError from "./RouteError.jsx";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 // Layouts
@@ -48,6 +49,7 @@ const PlanDetail = lazy(() => import("../features/plans/components/PlanDetail.js
 export const routes = [
   {
     element: <PublicLayout />,
+    errorElement: <RouteError />,
     children: [
       {
         path: "/",
@@ -61,6 +63,7 @@ export const routes = [
   },
   {
     element: <AuthLayout />,
+    errorElement: <RouteError />,
     children: [
       {
         path: "/verify-email",
@@ -87,6 +90,7 @@ export const routes = [
   },
   {
     element: <AuthGuard />,
+    errorElement: <RouteError />,
     children: [
       {
         path: "/onboarding/success",
@@ -110,6 +114,7 @@ export const routes = [
   {
     path: "/app",
     element: <AppLayout />,
+    errorElement: <RouteError />,
     children: [
       {
         element: <AuthGuard />,
