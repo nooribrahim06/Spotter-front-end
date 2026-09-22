@@ -12,7 +12,8 @@ export default function RecipeServingsEntry({ recipe, onConfirm, onCancel }) {
   const [servings, setServings] = useState(1);
 
   const preview = calculateRecipePreview(recipe, Number(servings) || 0);
-  const isValid = Number(servings) > 0;
+  const portion = Number(servings);
+  const isValid = Number.isFinite(portion) && portion >= 0.25 && portion <= 50 && Number.isInteger(portion * 4);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,7 +23,7 @@ export default function RecipeServingsEntry({ recipe, onConfirm, onCancel }) {
   };
 
   const adjustServings = (amount) => {
-    setServings((prev) => Math.max(0.25, Math.round(((Number(prev) || 0) + amount) * 100) / 100));
+    setServings((prev) => Math.min(50, Math.max(0.25, Math.round(((Number(prev) || 0) + amount) * 4) / 4)));
   };
 
   return (
@@ -72,9 +73,11 @@ export default function RecipeServingsEntry({ recipe, onConfirm, onCancel }) {
             <input
               id="recipe-servings-input"
               type="number"
-              min="0.1"
+              min="0.25"
               max="50"
               step="0.25"
+              inputMode="decimal"
+              required
               value={servings}
               onChange={(e) => setServings(e.target.value)}
               className={styles.servingsInput}
@@ -84,12 +87,12 @@ export default function RecipeServingsEntry({ recipe, onConfirm, onCancel }) {
           </div>
 
           <div className={styles.quickChips}>
-            <button type="button" onClick={() => adjustServings(-0.5)} className={styles.chipBtn}>-0.5</button>
-            <button type="button" onClick={() => setServings(0.5)} className={styles.chipBtn}>0.5</button>
-            <button type="button" onClick={() => setServings(1)} className={styles.chipBtn}>1.0</button>
-            <button type="button" onClick={() => setServings(1.5)} className={styles.chipBtn}>1.5</button>
-            <button type="button" onClick={() => setServings(2)} className={styles.chipBtn}>2.0</button>
-            <button type="button" onClick={() => adjustServings(0.5)} className={styles.chipBtn}>+0.5</button>
+            <button type="button" onClick={() => adjustServings(-0.5)} className={styles.chipBtn}>−½</button>
+            <button type="button" onClick={() => setServings(0.5)} className={styles.chipBtn}>½</button>
+            <button type="button" onClick={() => setServings(1)} className={styles.chipBtn}>1</button>
+            <button type="button" onClick={() => setServings(1.5)} className={styles.chipBtn}>1½</button>
+            <button type="button" onClick={() => setServings(2)} className={styles.chipBtn}>2</button>
+            <button type="button" onClick={() => adjustServings(0.5)} className={styles.chipBtn}>+½</button>
           </div>
         </div>
 

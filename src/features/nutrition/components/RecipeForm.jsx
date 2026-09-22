@@ -161,7 +161,7 @@ export default function RecipeForm({ initialRecipe, isEdit = false, onCancel }) 
               id="recipe-servings"
               type="number"
               min="0.1"
-              step="0.5"
+              step="any"
               placeholder="e.g., 2"
               {...register("servings", { valueAsNumber: true })}
               className={styles.input}
